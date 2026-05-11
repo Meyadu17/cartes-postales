@@ -50,7 +50,7 @@
             </div>
             <table class="table table-hover">
                 <thead>
-                    <tr>
+                    <tr><th>Code</th>
                         <th>Nom</th>
                         <th class="text-end">Actions</th>
                     </tr>
@@ -58,6 +58,7 @@
                 <tbody>
                     {% for region in regions %}
                     <tr>
+                        <td>{{ region.code }}</td>
                         <td>{{ region.nom }}</td>
                         <td class="text-end">
                             <button class="btn btn-sm btn-action-edit">
@@ -89,6 +90,7 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th>Code</th>
                         <th>Nom</th>
                         <th>Région</th>
                         <th class="text-end">Actions</th>
@@ -97,6 +99,7 @@
                 <tbody>
                     {% for departement in departements %}
                     <tr>
+                        <td>{{ departement.code }}</td>
                         <td>{{ departement.nom }}</td>
                         <td>{{ departement.region.nom }}</td>
                     <td class="text-end">
@@ -168,6 +171,15 @@
     modal_id: 'modalNouvelleRegion',
     modal_title: 'Nouvelle région',
     form: form_region
+} %}
+
+<!-- ------------------------------------------------------- -->
+<!-- -------------------- modale Département -------------------- -->
+<!-- ------------------------------------------------------- -->
+{% include 'components/_modal_form.html.twig' with {
+    modal_id: 'modalNouveauDepartement',
+    modal_title: 'Nouveau Département',
+    form: form_departement
 } %}
 
 {% endblock %}
