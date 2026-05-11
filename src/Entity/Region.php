@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RegionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RegionRepository::class)]
@@ -16,6 +17,8 @@ class Region
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: 'Le nom est obligatoire')]
+    #[Assert\Length(max: 100, maxMessage: 'Le nom ne peut pas dépasser 100 caractères')]
     private ?string $nom = null;
 
     /**
@@ -31,13 +34,18 @@ class Region
     private Collection $cartePostales;
 
     #[ORM\Column(length: 10)]
+    #[Assert\NotBlank(message: 'Le code est obligatoire')]
+    #[Assert\Length(max: 10, maxMessage: 'Le code ne peut pas dépasser 10 caractères')]
     private ?string $code = null;
 
+    // Constructeur
     public function __construct()
     {
         $this->departements = new ArrayCollection();
         $this->cartePostales = new ArrayCollection();
     }
+
+    // Getter & Setter
 
     public function getId(): ?int
     {

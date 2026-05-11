@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Region;
+use App\Form\RegionType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\RegionRepository;
 use App\Repository\DepartementRepository;
@@ -18,12 +21,26 @@ final class MonEspaceController extends AbstractController
     ) {}
     
    #[Route('/mon-espace', name: 'app_mon_espace')]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        // Formulaire création région
+        $region = new Region();
+        $formRegion = $this->createForm(RegionType::class, $region);
+        $formRegion->handleRequest($request);
+
+        if ($formRegion->isSubmitted() && $formRegion->isValid()) {
+            $this->regionRepository->save($region, true);
+
+            return $this->redirectToRoute('app_mon_espace');
+        }
+        // Fin du formulaire de création de région
+
         return $this->render('mon_espace/index.html.twig', [
             'regions' => $this->regionRepository->findAll(),
             'departements' => $this->departementRepository->findAll(),
             'villes' => $this->villeRepository->findAll(),
+
+            'form_region' => $formRegion,
         ]);
     }
 

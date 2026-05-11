@@ -1,0 +1,13 @@
+{# templates/form/custom_theme.html.twig #}
+
+{% block form_label %}
+    {% if label is not same as(false) %}
+        {% set label = label|default(name|humanize) %}
+        <label class="form-label" for="{{ id }}">
+            {{ label }}{% if required %} <span class="text-danger">*</span>{% endif %}
+        </label>
+    {% endif %}
+{% endblock %}
+
+
+

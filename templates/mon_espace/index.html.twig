@@ -160,4 +160,14 @@
 
     </div>
 </div>
+
+<!-- ------------------------------------------------------- -->
+<!-- -------------------- modale Région -------------------- -->
+<!-- ------------------------------------------------------- -->
+{% include 'components/_modal_form.html.twig' with {
+    modal_id: 'modalNouvelleRegion',
+    modal_title: 'Nouvelle région',
+    form: form_region
+} %}
+
 {% endblock %}

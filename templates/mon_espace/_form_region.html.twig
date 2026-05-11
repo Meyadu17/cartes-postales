@@ -1,0 +1,19 @@
+{# templates/mon_espace/_form_region.html.twig #}
+
+{{ form_start(form_region) }}
+
+    <div class="form-floating mb-3">
+        {{ form_widget(form_region.nom, {'attr': {'class': 'form-control', 'placeholder': 'Nom de la région'}}) }}
+        {{ form_label(form_region.nom, null, {'label': 'Nom de la région'}) }}
+        {{ form_errors(form_region.nom) }}
+    </div>
+
+    <div class="form-floating mb-3">
+        {{ form_widget(form_region.code, {'attr': {'class': 'form-control', 'placeholder': 'Code de la région'}}) }}
+        {{ form_label(form_region.code, 'Code de la région') }}
+        {{ form_errors(form_region.code) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Créer</button>
+
+{{ form_end(form_region) }}
