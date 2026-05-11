@@ -1,0 +1,118 @@
+@use "bootstrap/scss/bootstrap";
+
+// ===========================
+// VARIABLES SCSS
+// ===========================
+$bg-main:        #F5F0E8;  // light beige
+$bg-secondary:   #E8DCC8;  // medium beige
+$accent:         #8B6914;  // golden brown
+$text-main:      #3D2B1F;  // dark brown
+$text-secondary: #6B4C35;  // medium brown
+$border:         #C4A882;  // dark beige
+
+// ===========================
+// VARIABLES CSS (pour usage dans Twig si besoin)
+// ===========================
+:root {
+    --main-background-color:      #{$bg-main};
+    --secondary-background-color: #{$bg-secondary};
+    --accent-color:               #{$accent};
+    --main-text-color:            #{$text-main};
+    --secondary-text-color:       #{$text-secondary};
+    --border-color:               #{$border};
+}
+
+// ===========================
+// BASE
+// ===========================
+body {
+    background-color: $bg-main;
+    color: $text-main;
+    font-family: 'Georgia', serif;
+}
+
+// ===========================
+// POSTCARD COMPONENTS
+// ===========================
+.carte {
+    background-color: $bg-secondary;
+    border: 1px solid $border;
+    border-radius: 4px;
+    box-shadow: 2px 2px 8px rgba($text-main, 0.2);
+    transition: all 0.2s ease;
+
+    &:hover {
+        box-shadow: 4px 4px 16px rgba($text-main, 0.35);
+        transform: translateY(-2px);
+    }
+}
+
+// ===========================
+// NAVBAR
+// ===========================
+.navbar-vintage {
+    background-color: $bg-secondary;
+    border-bottom: 2px solid $border;
+
+    .navbar-brand {
+        color: $accent;
+        font-size: 1.5rem;
+
+        &:hover {
+            color: darken($accent, 10%);
+        }
+    }
+
+    .nav-link {
+        color: $text-main;
+
+        &:hover {
+            color: $accent;
+        }
+
+        &.active {
+            color: $accent;
+        }
+    }
+
+    .dropdown-menu {
+        background-color: $bg-secondary;
+        border: 1px solid $border;
+
+        .dropdown-item {
+            color: $text-main;
+
+            &:hover {
+                background-color: $border;
+                color: $accent;
+            }
+        }
+    }
+
+    .navbar-toggler {
+        border-color: $border;
+    }
+}
+
+
+// ===========================
+// BUTTONS
+// ===========================
+.btn-vintage {
+    background-color: $accent;
+    color: $bg-main;
+    border: 1px solid $border;
+
+    &:hover {
+        background-color: darken($accent, 10%);
+        color: $bg-main;
+    }
+}
+
+// ===========================
+// HEADINGS
+// ===========================
+h1, h2, h3 {
+    color: $accent;
+    font-family: 'Georgia', serif;
+}
