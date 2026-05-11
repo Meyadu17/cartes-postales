@@ -1,5 +1,75 @@
-@import "tailwindcss";
+@import "bootstrap/dist/css/bootstrap.min.css";
+/* ===========================
+   VARIABLES DE COULEURS
+   =========================== */
+:root {
+    --couleur-fond-principal:    #F5F0E8;  /* beige clair */
+    --couleur-fond-secondaire:   #E8DCC8;  /* beige moyen */
+    --couleur-accent:            #8B6914;  /* brun doré */
+    --couleur-texte-principal:   #3D2B1F;  /* brun foncé */
+    --couleur-texte-secondaire:  #6B4C35;  /* brun moyen */
+    --couleur-bordure:           #C4A882;  /* beige foncé */
+}
 
+/* ===========================
+   BASE
+   =========================== */
 body {
-    background-color: skyblue;
+    background-color: var(--couleur-fond-principal);
+    color: var(--couleur-texte-principal);
+    font-family: 'Georgia', serif;
+}
+
+/* ===========================
+   COMPOSANTS CARTES POSTALES
+   =========================== */
+.carte {
+    background-color: var(--couleur-fond-secondaire);
+    border: 1px solid var(--couleur-bordure);
+    border-radius: 4px;
+    box-shadow: 2px 2px 8px rgba(61, 43, 31, 0.2);
+}
+
+.carte:hover {
+    box-shadow: 4px 4px 16px rgba(61, 43, 31, 0.35);
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
+}
+
+/* ===========================
+   NAVBAR
+   =========================== */
+.navbar-vintage {
+    background-color: var(--couleur-fond-secondaire);
+    border-bottom: 2px solid var(--couleur-bordure);
+}
+
+.navbar-vintage .nav-link {
+    color: var(--couleur-texte-principal);
+}
+
+.navbar-vintage .nav-link:hover {
+    color: var(--couleur-accent);
+}
+
+/* ===========================
+   BOUTONS
+   =========================== */
+.btn-vintage {
+    background-color: var(--couleur-accent);
+    color: var(--couleur-fond-principal);
+    border: 1px solid var(--couleur-bordure);
+}
+
+.btn-vintage:hover {
+    background-color: var(--couleur-texte-secondaire);
+    color: var(--couleur-fond-principal);
+}
+
+/* ===========================
+   TITRES
+   =========================== */
+h1, h2, h3 {
+    color: var(--couleur-accent);
+    font-family: 'Georgia', serif;
 }
