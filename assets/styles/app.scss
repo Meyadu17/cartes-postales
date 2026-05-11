@@ -1,4 +1,5 @@
 @use "bootstrap/scss/bootstrap";
+@use "bootstrap-icons/font/bootstrap-icons";
 
 // ===========================
 // VARIABLES SCSS
@@ -28,7 +29,7 @@ $border:         #C4A882;  // dark beige
 body {
     background-color: $bg-main;
     color: $text-main;
-    font-family: 'Georgia', serif;
+    font-family: 'Felipa', Arial !important;
 }
 
 // ===========================
@@ -114,5 +115,67 @@ body {
 // ===========================
 h1, h2, h3 {
     color: $accent;
-    font-family: 'Georgia', serif;
+    font-family: 'Felipa', Arial !important;
+}
+// ===========================
+// ONGLETS
+// ===========================
+.nav-tabs {
+    border-bottom: 2px solid $border;
+
+    .nav-link {
+        color: $text-secondary;
+        font-family: 'Felipa', Arial;
+        border: none;
+        border-bottom: 2px solid transparent;
+
+        &:hover {
+            color: $accent;
+            border-bottom: 2px solid $accent;
+            background: transparent;
+        }
+
+        &.active {
+            color: $accent;
+            font-weight: bold;
+            border-bottom: 2px solid $accent;
+            background: transparent;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+    }
+}
+
+// ===========================
+// BOUTONS D'ACTION
+// ===========================
+$danger: #8B3A3A;
+
+.btn-action-edit {
+    background-color: $accent;
+    border-color: $accent;
+    color: $bg-main;
+    padding: 2px 8px;
+    font-size: 1rem; // Force la taille de l'icône
+
+    &:hover {
+        background-color: darken($accent, 10%);
+        border-color: darken($accent, 10%);
+        color: $bg-main;
+    }
+}
+
+.btn-action-delete {
+    background-color: $danger;
+    border-color: $danger;
+    color: $bg-main;
+    padding: 2px 8px;
+    font-size: 1rem; // Force la taille de l'icône
+
+    &:hover {
+        background-color: darken($danger, 10%);
+        border-color: darken($danger, 10%);
+        color: $bg-main;
+    }
 }

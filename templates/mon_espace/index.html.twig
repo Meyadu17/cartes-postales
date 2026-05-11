@@ -1,20 +1,163 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello MonEspaceController!{% endblock %}
+{% block title %}Mon Espace{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>D:/workspace-php/cartes-postales/src/Controller/MonEspaceController.php</code></li>
-        <li>Your template at <code>D:/workspace-php/cartes-postales/templates/mon_espace/index.html.twig</code></li>
+<div class="container mt-4">
+    
+    {# ===== BOUTON NOUVELLE CARTE POSTALE ===== #}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Mon Espace</h1>
+        <a href="#" class="btn btn-vintage">
+            <i class="bi bi-plus-lg"></i> Nouvelle carte postale
+        </a>
+    </div>
+
+    {# ===== ONGLETS ===== #}
+    <ul class="nav nav-tabs mb-3" id="monEspaceTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="regions-tab" data-bs-toggle="tab" 
+                    data-bs-target="#regions" type="button">
+                Régions
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="departements-tab" data-bs-toggle="tab" 
+                    data-bs-target="#departements" type="button">
+                Départements
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="villes-tab" data-bs-toggle="tab" 
+                    data-bs-target="#villes" type="button">
+                Villes
+            </button>
+        </li>
     </ul>
+
+    {# ===== CONTENU ONGLETS ===== #}
+    <div class="tab-content" id="monEspaceTabContent">
+
+        {# RÉGIONS #}
+        <div class="tab-pane fade show active" id="regions" role="tabpanel">
+            <div class="d-flex justify-content-end mb-2">
+                <button class="btn btn-sm btn-vintage" data-bs-toggle="modal" 
+                        data-bs-target="#modalNouvelleRegion">
+                    <i class="bi bi-plus-lg"></i> Nouvelle région
+                </button>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for region in regions %}
+                    <tr>
+                        <td>{{ region.nom }}</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-action-edit">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-action-delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="2" class="text-center">Aucune région</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# DÉPARTEMENTS #}
+        <div class="tab-pane fade" id="departements" role="tabpanel">
+            <div class="d-flex justify-content-end mb-2">
+                <button class="btn btn-sm btn-vintage" data-bs-toggle="modal" 
+                        data-bs-target="#modalNouveauDepartement">
+                    <i class="bi bi-plus-lg"></i> Nouveau département
+                </button>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Région</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for departement in departements %}
+                    <tr>
+                        <td>{{ departement.nom }}</td>
+                        <td>{{ departement.region.nom }}</td>
+                    <td class="text-end">
+                        <button class="btn btn-sm btn-action-edit">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-action-delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">Aucun département</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {# VILLES #}
+        <div class="tab-pane fade" id="villes" role="tabpanel">
+            <div class="d-flex justify-content-end mb-2">
+                <button class="btn btn-sm btn-vintage" data-bs-toggle="modal" 
+                        data-bs-target="#modalNouvelleVille">
+                    <i class="bi bi-plus-lg"></i> Nouvelle ville
+                </button>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Département</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ville in villes %}
+                    <tr>
+                        <td>{{ ville.nom }}</td>
+                        <td>{{ ville.departement.nom }}</td>
+                        <td class="text-end">
+                            <button class="btn btn-sm btn-action-edit">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-action-delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" class="text-center">Aucune ville</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
 </div>
 {% endblock %}
