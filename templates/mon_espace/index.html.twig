@@ -173,13 +173,22 @@
     form: form_region
 } %}
 
-<!-- ------------------------------------------------------- -->
-<!-- -------------------- modale Département -------------------- -->
-<!-- ------------------------------------------------------- -->
+<!-- ---------------------------------------------------------- -->
+<!-- ------------------- modale Département ------------------- -->
+<!-- ---------------------------------------------------------- -->
 {% include 'components/_modal_form.html.twig' with {
     modal_id: 'modalNouveauDepartement',
     modal_title: 'Nouveau Département',
     form: form_departement
+} %}
+
+<!-- ------------------------------------------------------ -->
+<!-- -------------------- modale Ville -------------------- -->
+<!-- ------------------------------------------------------ -->
+{% include 'components/_modal_form.html.twig' with {
+    modal_id: 'modalNouvelleVille',
+    modal_title: 'Nouvelle Ville',
+    form: form_ville
 } %}
 
 {% endblock %}

@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Departement;
 use App\Entity\Region;
+use App\Entity\Ville;
 use App\Form\DepartementType;
 use App\Form\RegionType;
+use App\Form\VilleType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +50,16 @@ final class MonEspaceController extends AbstractController
         }
         // Fin du formulaire de création de département
 
+        // Formulaire création ville
+        $ville = new Ville();
+        $formVille = $this->createForm(VilleType::class, $ville);
+        $formVille->handleRequest($request);
+
+        if ($formVille->isSubmitted() && $formVille->isValid()) {
+            $this->villeRepository->save($ville, true);
+            return $this->redirectToRoute('app_mon_espace');
+        }
+        // Fin du formulaire de création de ville
 
         return $this->render('mon_espace/index.html.twig', [
             'regions' => $this->regionRepository->findAll(),
@@ -56,6 +68,7 @@ final class MonEspaceController extends AbstractController
 
             'form_region' => $formRegion,
             'form_departement' => $formDepartement,
+            'form_ville' => $formVille,
         ]);
     }
 

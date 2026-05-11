@@ -16,7 +16,7 @@ class RegionRepository extends ServiceEntityRepository
         parent::__construct($registry, Region::class);
     }
 
-        public function save(Region $region, bool $flush = false): void
+    public function save(Region $region, bool $flush = false): void
     {
         $this->getEntityManager()->persist($region);
 
