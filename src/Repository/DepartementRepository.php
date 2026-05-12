@@ -25,4 +25,11 @@ class DepartementRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllOrderedByNom(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->orderBy('r.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

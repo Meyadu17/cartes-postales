@@ -131,7 +131,7 @@ class Region
 
     public function setCode(string $code): static
     {
-        $this->code = $code;
+        $this->code = strtoupper(trim($code)); //force la majuscule
 
         return $this;
     }

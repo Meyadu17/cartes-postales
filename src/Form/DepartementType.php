@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Departement;
 use App\Entity\Region;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -16,7 +17,11 @@ class DepartementType extends AbstractType
     {
         $builder
             ->add('nom')
-            ->add('code')
+            ->add('code', TextType::class, [
+                'attr' => [
+                    'style' => 'text-transform: uppercase',
+                ],
+            ])
             ->add('region', EntityType::class, [
                 'class' => Region::class,
                 'choice_label' => 'nom',

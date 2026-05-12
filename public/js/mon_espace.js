@@ -96,6 +96,7 @@ $(document).ready(function() {
     // =====================
     const tableRegions = $('#tableRegions').DataTable({
         ajax: { url: config.urlRegions, dataSrc: '' },
+        order: [[1, 'asc']],
         columns: [
             { data: 'code', width: '15%' },
             { data: 'nom', width: '70%' },
@@ -125,6 +126,7 @@ $(document).ready(function() {
     // =====================
     const tableDepartements = $('#tableDepartements').DataTable({
         ajax: { url: config.urlDepartements, dataSrc: '' },
+        order: [[1, 'asc']],
         columns: [
             { data: 'code', width: '10%' },
             { data: 'nom', width: '40%' },
@@ -154,6 +156,7 @@ $(document).ready(function() {
     // =====================
     const tableVilles = $('#tableVilles').DataTable({
         ajax: { url: config.urlVilles, dataSrc: '' },
+        order: [[0, 'asc']],
         columns: [
             { data: 'nom', width: '45%' },
             { data: 'departement', width: '40%' },

@@ -35,9 +35,9 @@ final class MonEspaceController extends AbstractController
     public function index(): Response
     {
         return $this->render('mon_espace/index.html.twig', [
-            'regions'          => $this->regionRepository->findAll(),
-            'departements'     => $this->departementRepository->findAll(),
-            'villes'           => $this->villeRepository->findAll(),
+            'regions'          => $this->regionRepository->findAllOrderedByNom(),
+            'departements'     => $this->departementRepository->findAllOrderedByNom(),
+            'villes'           => $this->villeRepository->findAllOrderedByNom(),
 
             'form_region'      => $this->createForm(RegionType::class, new Region())->createView(),
             'form_departement' => $this->createForm(DepartementType::class, new Departement())->createView(),
@@ -59,7 +59,7 @@ final class MonEspaceController extends AbstractController
             'code' => $r->getCode(),
             'nom'  => $r->getNom(),
             'id'   => $r->getId(),
-        ], $this->regionRepository->findAll());
+        ], $this->regionRepository->findAllOrderedByNom());
 
         return $this->json($data);
     }
@@ -72,7 +72,7 @@ final class MonEspaceController extends AbstractController
             'nom'    => $d->getNom(),
             'region' => $d->getRegion()?->getNom(),
             'id'     => $d->getId(),
-        ], $this->departementRepository->findAll());
+        ], $this->departementRepository->findAllOrderedByNom());
 
         return $this->json($data);
     }
@@ -84,7 +84,7 @@ final class MonEspaceController extends AbstractController
             'nom'         => $v->getNom(),
             'departement' => $v->getDepartement()?->getNom(),
             'id'          => $v->getId(),
-        ], $this->villeRepository->findAll());
+        ], $this->villeRepository->findAllOrderedByNom());
 
         return $this->json($data);
     }
