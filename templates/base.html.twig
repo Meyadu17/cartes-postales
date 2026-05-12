@@ -14,10 +14,6 @@
     {{ encore_entry_link_tags('app') }}
     {{ encore_entry_script_tags('app') }}
 
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-
 </head>
 <body>
 
@@ -50,7 +46,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">Mes cartes postales</a>
+                <a class="nav-link">Mes cartes postales</a>
             </li>
         </ul>
         <ul class="navbar-nav  mb-2 mb-lg-0">
@@ -58,7 +54,7 @@
                 <a class="nav-link active" aria-current="page" href="{{ path('app_mon_espace') }}">Mon espace</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Wekogril</a>
+                <a class="nav-link active" aria-current="page" href="#">Wekogirl</a>
             </li>
         </ul>
     </div>
@@ -68,6 +64,12 @@
 <div class="container mt-4">
     {% block body %}{% endblock %}
 </div>
+
+    <!-- Script JS mis en fin pour éviter d'être écrasé par bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    {% block javascripts %}{% endblock %}
 
 </body>
 </html>

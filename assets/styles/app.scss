@@ -179,3 +179,56 @@ $danger: #8B3A3A;
         color: $bg-main;
     }
 }
+
+// ===========================
+// DATATABLES
+// ===========================
+table.dataTable thead th {
+    padding-right: 1.5em;
+    padding-left: 0;
+    text-align: left;
+}
+
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc:after {
+    right: auto;
+    left: auto;
+    position: relative;
+    margin-left: 4px;
+}
+
+// ===========================
+// DATATABLES LAYOUT
+// ===========================
+.dataTables_wrapper {
+    .dataTables_length,
+    .dataTables_filter {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    // La première ligne length + filter + bouton
+    > .row:first-child,
+    .dt-toolbar {
+        display: flex !important;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+
+        .dataTables_length { flex: 0 0 auto; }
+        .dataTables_filter { 
+            flex: 1; 
+            text-align: center;
+            justify-content: center;
+        }
+        .btn { flex: 0 0 auto; }
+    }
+}
+
+
+

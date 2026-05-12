@@ -42,12 +42,12 @@
 
         {# RÉGIONS #}
         <div class="tab-pane fade show active" id="regions" role="tabpanel">
-            <div class="d-flex justify-content-end mb-2">
+            {# <div class="d-flex justify-content-end mb-2">
                 <button class="btn btn-sm btn-vintage" data-bs-toggle="modal" 
                         data-bs-target="#modalNouvelleRegion">
                     <i class="bi bi-plus-lg"></i> Nouvelle région
                 </button>
-            </div>
+            </div> #}
             <table class="table table-hover" id="tableRegions">
                 <thead>
                     <tr><th>Code</th>
@@ -81,12 +81,12 @@
 
         {# DÉPARTEMENTS #}
         <div class="tab-pane fade" id="departements" role="tabpanel">
-            <div class="d-flex justify-content-end mb-2">
+            {# <div class="d-flex justify-content-end mb-2">
                 <button class="btn btn-sm btn-vintage" data-bs-toggle="modal" 
                         data-bs-target="#modalNouveauDepartement">
                     <i class="bi bi-plus-lg"></i> Nouveau département
                 </button>
-            </div>
+            </div> #}
             <table class="table table-hover" id="tableDepartements">
                 <thead>
                     <tr>
@@ -123,12 +123,12 @@
 
         {# VILLES #}
         <div class="tab-pane fade" id="villes" role="tabpanel">
-            <div class="d-flex justify-content-end mb-2">
+            {# <div class="d-flex justify-content-end mb-2">
                 <button class="btn btn-sm btn-vintage" data-bs-toggle="modal" 
                         data-bs-target="#modalNouvelleVille">
                     <i class="bi bi-plus-lg"></i> Nouvelle ville
                 </button>
-            </div>
+            </div> #}
             <table class="table table-hover" id="tableVilles">
                 <thead>
                     <tr>
@@ -197,20 +197,48 @@
     {{ parent() }}
     <script>
         $(document).ready(function() {
+
             $('#tableRegions').DataTable({
                 language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json' },
-                columnDefs: [{ orderable: false, targets: -1 }]
+                columnDefs: [{ orderable: false, targets: -1 }],
+                dom: "<'dt-toolbar d-flex align-items-center gap-3 mb-2'lf<'ms-auto'B>>rtip",
+                initComplete: function() {
+                    $('#tableRegions_wrapper .dataTables_filter').css('flex', '1').css('text-align', 'center');
+                    // Ajouter le bouton après initComplete
+                    $('#tableRegions_wrapper .dt-toolbar').append(
+                        '<button class="btn btn-sm btn-vintage ms-auto" data-bs-toggle="modal" data-bs-target="#modalNouvelleRegion"><i class="bi bi-plus-lg"></i> Nouvelle région</button>'
+                    );
+                }
             });
 
             $('#tableDepartements').DataTable({
                 language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json' },
-                columnDefs: [{ orderable: false, targets: -1 }]
+                columnDefs: [{ orderable: false, targets: -1 }],
+                initComplete: function() {
+                    $('#tableDepartements_wrapper .dataTables_filter').css('flex', '1').css('text-align', 'center');
+                    $('#tableDepartements_wrapper .dataTables_length').after(
+                        $('#tableDepartements_wrapper .dataTables_filter')
+                    );
+                    $('#tableDepartements_wrapper .dataTables_filter').after(
+                        '<button class="btn btn-sm btn-vintage" data-bs-toggle="modal" data-bs-target="#modalNouveauDepartement"><i class="bi bi-plus-lg"></i> Nouveau département</button>'
+                    );
+                }
             });
 
             $('#tableVilles').DataTable({
                 language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json' },
-                columnDefs: [{ orderable: false, targets: -1 }]
+                columnDefs: [{ orderable: false, targets: -1 }],
+                initComplete: function() {
+                    $('#tableVilles_wrapper .dataTables_filter').css('flex', '1').css('text-align', 'center');
+                    $('#tableVilles_wrapper .dataTables_length').after(
+                        $('#tableVilles_wrapper .dataTables_filter')
+                    );
+                    $('#tableVilles_wrapper .dataTables_filter').after(
+                        '<button class="btn btn-sm btn-vintage" data-bs-toggle="modal" data-bs-target="#modalNouvelleVille"><i class="bi bi-plus-lg"></i> Nouvelle ville</button>'
+                    );
+                }
             });
         });
     </script>
 {% endblock %}
+
