@@ -1,0 +1,53 @@
+{# templates/news/index.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveautés{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Nouveautés</h1>
+
+    {% set news = [
+        {
+            date: '12/05/2026', 
+            titre: 'Créer, Modifier, Supprimer', 
+            items: [
+                'Mise en place de la création multiple des régions, départements ou villes (avec le bouton Enregistrer et créer)',
+                'Mise en place de la modification des régions, départements et villes', 
+                'Mise en place de la suppression des régions, départements et villes', 
+                'Mise en place du tri par colonnes', 
+                'Mise en place d\'une barre de recherche', 
+                'Mise en place de la page News', 
+                'Mise en place de cards sur la page d\'accueil pour le choix de la police',
+                'Ajout d\'un logo'
+            ]},
+        {
+            date: '11/05/2026', 
+            titre: 'Début du projet', 
+            items: [
+                'Mise en place de la base de données',
+                'Mise en place du menu', 
+                'Ajout de Mon Espace', 
+                'Création des onglets Département, Région et Villes', 
+                'Possibilité de créer des départements, régions et villes',
+                'Mise en place de la pagination',
+                'Mise en place du template de base (style vintage / polices Google Fonts)'
+            ]},
+    ] %}
+
+
+    {% for n in news %}
+    <div class="card">
+    <div class="card-header">
+        <strong>{{ n.titre }}</strong> — {{ n.date }}
+    </div>
+    <ul class="list-group list-group-flush">
+        {% for item in n.items %}
+        <li class="list-group-item">{{ item }}</li>
+        {% endfor %}
+    </ul>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}
