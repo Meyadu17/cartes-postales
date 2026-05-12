@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\RegionRepository;
 use App\Repository\DepartementRepository;
 use App\Repository\VilleRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class MonEspaceController extends AbstractController
 {
@@ -23,71 +24,109 @@ final class MonEspaceController extends AbstractController
         private DepartementRepository $departementRepository,
         private VilleRepository $villeRepository,
     ) {}
-    
-   #[Route('/mon-espace', name: 'app_mon_espace')]
-    public function index(Request $request): Response
+
+    // =====================
+    // PAGE PRINCIPALE
+    // =====================
+    #[Route('/mon-espace', name: 'app_mon_espace')]
+    public function index(): Response
     {
-        // Formulaire création région
-        $region = new Region();
-        $formRegion = $this->createForm(RegionType::class, $region);
-        $formRegion->handleRequest($request);
-
-        // Redirection après la validation
-        if ($formRegion->isSubmitted() && $formRegion->isValid()) {
-            $this->regionRepository->save($region, true);
-
-            if ($request->request->get('action') === 'save_and_new') {
-                return $this->redirect($this->generateUrl('app_mon_espace', ['reopen' => 'region']) . '#region');
-            }
-
-            return $this->redirect($this->generateUrl('app_mon_espace') . '#region');
-        }
-
-        // Fin du formulaire de création de région
-
-        // Formulaire création département
-        $departement = new Departement();
-        $formDepartement = $this->createForm(DepartementType::class, $departement);
-        $formDepartement->handleRequest($request);
-
-        // Redirection après la validation
-        if ($formDepartement->isSubmitted() && $formDepartement->isValid()) {
-            $this->departementRepository->save($departement, true);
-
-            if ($request->request->get('action') === 'save_and_new') {
-                return $this->redirect($this->generateUrl('app_mon_espace', ['reopen' => 'departement']) . '#departement');
-            }
-
-            return $this->redirect($this->generateUrl('app_mon_espace') . '#departement');
-        }
-        // Fin du formulaire de création de département
-
-        // Formulaire création ville
-        $ville = new Ville();
-        $formVille = $this->createForm(VilleType::class, $ville);
-        $formVille->handleRequest($request);
-
-        // Redirection après la validation
-        if ($formVille->isSubmitted() && $formVille->isValid()) {
-            $this->villeRepository->save($ville, true);
-
-            if ($request->request->get('action') === 'save_and_new') {
-                return $this->redirect($this->generateUrl('app_mon_espace', ['reopen' => 'ville']) . '#ville');
-            }
-
-            return $this->redirect($this->generateUrl('app_mon_espace') . '#ville');
-        }
-
-        // Fin du formulaire de création de ville
-
         return $this->render('mon_espace/index.html.twig', [
-            'regions' => $this->regionRepository->findAll(),
-            'departements' => $this->departementRepository->findAll(),
-            'villes' => $this->villeRepository->findAll(),
-
-            'form_region' => $formRegion,
-            'form_departement' => $formDepartement,
-            'form_ville' => $formVille,
+            'regions'          => $this->regionRepository->findAll(),
+            'departements'     => $this->departementRepository->findAll(),
+            'villes'           => $this->villeRepository->findAll(),
+            'form_region'      => $this->createForm(RegionType::class, new Region())->createView(),
+            'form_departement' => $this->createForm(DepartementType::class, new Departement())->createView(),
+            'form_ville'       => $this->createForm(VilleType::class, new Ville())->createView(),
         ]);
+    }
+
+
+    // =====================
+    // DONNÉES POUR LES DATATABLES
+    // =====================
+    #[Route('/mon-espace/data/regions', name: 'app_data_regions')]
+    public function dataRegions(): JsonResponse
+    {
+        $data = array_map(fn($r) => [
+            'code' => $r->getCode(),
+            'nom'  => $r->getNom(),
+            'id'   => $r->getId(),
+        ], $this->regionRepository->findAll());
+
+        return $this->json($data);
+    }
+
+    #[Route('/mon-espace/data/departements', name: 'app_data_departements')]
+    public function dataDepartements(): JsonResponse
+    {
+        $data = array_map(fn($d) => [
+            'code'   => $d->getCode(),
+            'nom'    => $d->getNom(),
+            'region' => $d->getRegion()?->getNom(),
+            'id'     => $d->getId(),
+        ], $this->departementRepository->findAll());
+
+        return $this->json($data);
+    }
+
+    #[Route('/mon-espace/data/villes', name: 'app_data_villes')]
+    public function dataVilles(): JsonResponse
+    {
+        $data = array_map(fn($v) => [
+            'nom'         => $v->getNom(),
+            'departement' => $v->getDepartement()?->getNom(),
+            'id'          => $v->getId(),
+        ], $this->villeRepository->findAll());
+
+        return $this->json($data);
+    }
+
+    // =====================
+    // CRÉATION
+    // =====================
+    #[Route('/mon-espace/region', name: 'app_region_new', methods: ['POST'])]
+    public function newRegion(Request $request): JsonResponse
+    {
+        $region = new Region();
+        $form = $this->createForm(RegionType::class, $region);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->regionRepository->save($region, true);
+            return $this->json(['success' => true]);
+        }
+
+        return $this->json(['success' => false], 400);
+    }
+
+    #[Route('/mon-espace/departement', name: 'app_departement_new', methods: ['POST'])]
+    public function newDepartement(Request $request): JsonResponse
+    {
+        $departement = new Departement();
+        $form = $this->createForm(DepartementType::class, $departement);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->departementRepository->save($departement, true);
+            return $this->json(['success' => true]);
+        }
+
+        return $this->json(['success' => false], 400);
+    }
+
+    #[Route('/mon-espace/ville', name: 'app_ville_new', methods: ['POST'])]
+    public function newVille(Request $request): JsonResponse
+    {
+        $ville = new Ville();
+        $form = $this->createForm(VilleType::class, $ville);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->villeRepository->save($ville, true);
+            return $this->json(['success' => true]);
+        }
+
+        return $this->json(['success' => false], 400);
     }
 }

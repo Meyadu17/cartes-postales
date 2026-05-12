@@ -30,6 +30,7 @@ class RegionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Region::class,
+            'csrf_protection' => false,
         ]);
     }
 }

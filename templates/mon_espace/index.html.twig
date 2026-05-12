@@ -42,12 +42,7 @@
 
         {# RÉGIONS #}
         <div class="tab-pane fade show active" id="regions" role="tabpanel">
-            {# <div class="d-flex justify-content-end mb-2">
-                <button class="btn btn-sm btn-vintage" data-bs-toggle="modal" 
-                        data-bs-target="#modalNouvelleRegion">
-                    <i class="bi bi-plus-lg"></i> Nouvelle région
-                </button>
-            </div> #}
+            
             <table class="table table-hover" id="tableRegions">
                 <thead>
                     <tr><th>Code</th>
@@ -55,38 +50,12 @@
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for region in regions %}
-                    <tr>
-                        <td>{{ region.code }}</td>
-                        <td>{{ region.nom }}</td>
-                        <td class="text-end">
-                            <button class="btn btn-sm btn-action-edit">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-sm btn-action-delete">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="2" class="text-center">Aucune région</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
 
         {# DÉPARTEMENTS #}
         <div class="tab-pane fade" id="departements" role="tabpanel">
-            {# <div class="d-flex justify-content-end mb-2">
-                <button class="btn btn-sm btn-vintage" data-bs-toggle="modal" 
-                        data-bs-target="#modalNouveauDepartement">
-                    <i class="bi bi-plus-lg"></i> Nouveau département
-                </button>
-            </div> #}
             <table class="table table-hover" id="tableDepartements">
                 <thead>
                     <tr>
@@ -96,39 +65,12 @@
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for departement in departements %}
-                    <tr>
-                        <td>{{ departement.code }}</td>
-                        <td>{{ departement.nom }}</td>
-                        <td>{{ departement.region.nom }}</td>
-                    <td class="text-end">
-                        <button class="btn btn-sm btn-action-edit">
-                            <i class="bi bi-pencil"></i>
-                        </button>
-                        <button class="btn btn-sm btn-action-delete">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </td>
-
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="3" class="text-center">Aucun département</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
 
         {# VILLES #}
         <div class="tab-pane fade" id="villes" role="tabpanel">
-            {# <div class="d-flex justify-content-end mb-2">
-                <button class="btn btn-sm btn-vintage" data-bs-toggle="modal" 
-                        data-bs-target="#modalNouvelleVille">
-                    <i class="bi bi-plus-lg"></i> Nouvelle ville
-                </button>
-            </div> #}
             <table class="table table-hover" id="tableVilles">
                 <thead>
                     <tr>
@@ -137,27 +79,7 @@
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for ville in villes %}
-                    <tr>
-                        <td>{{ ville.nom }}</td>
-                        <td>{{ ville.departement.nom }}</td>
-                        <td class="text-end">
-                            <button class="btn btn-sm btn-action-edit">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-sm btn-action-delete">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="3" class="text-center">Aucune ville</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
 
@@ -198,66 +120,193 @@
     <script>
         $(document).ready(function() {
 
-            $('#tableRegions').DataTable({
+            console.log('jQuery prêt');
+            console.log('modales trouvées :', $('#modalNouvelleRegion').length, $('#modalNouveauDepartement').length, $('#modalNouvelleVille').length);
+            console.log('formulaires trouvés :', $('#modalNouvelleRegion form').length);
+
+            // =====================
+            // RÉGIONS
+            // =====================
+            const tableRegions = $('#tableRegions').DataTable({
+                ajax: {
+                    url: '{{ path("app_data_regions") }}',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'code', width: '15%' },
+                    { data: 'nom', width: '70%' },
+                    {
+                        data: 'id',
+                        orderable: false,
+                        width: '15%',
+                        className: 'text-end',
+                        render: function(id) {
+                            return `<button class="btn btn-sm btn-action-edit"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-action-delete"><i class="bi bi-trash"></i></button>`;
+                        }
+                    }
+                ],
                 language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json' },
-                columnDefs: [{ orderable: false, targets: -1 }],
-                dom: "<'dt-toolbar d-flex align-items-center gap-3 mb-2'lf<'ms-auto'B>>rtip",
                 initComplete: function() {
-                    $('#tableRegions_wrapper .dataTables_filter').css('flex', '1').css('text-align', 'center');
-                    // Ajouter le bouton après initComplete
-                    $('#tableRegions_wrapper .dt-toolbar').append(
-                        '<button class="btn btn-sm btn-vintage ms-auto" data-bs-toggle="modal" data-bs-target="#modalNouvelleRegion"><i class="bi bi-plus-lg"></i> Nouvelle région</button>'
-                    );
+                    const wrapper = $('#tableRegions_wrapper');
+                    const length = wrapper.find('.dataTables_length').detach();
+                    const filter = wrapper.find('.dataTables_filter').detach();
+
+                    const toolbar = $('<div class="dt-custom-toolbar"></div>');
+                    toolbar.append(length);
+                    toolbar.append(filter);
+                    toolbar.append('<a href="#" class="btn btn-sm btn-vintage" data-bs-toggle="modal" data-bs-target="#modalNouvelleRegion"><i class="bi bi-plus-lg"></i> Nouvelle région</a>');
+
+                    wrapper.prepend(toolbar);
                 }
             });
 
-            $('#tableDepartements').DataTable({
+            // =====================
+            // DÉPARTEMENTS
+            // =====================
+            const tableDepartements = $('#tableDepartements').DataTable({
+                ajax: {
+                    url: '{{ path("app_data_departements") }}',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'code', width: '10%' },
+                    { data: 'nom', width: '40%' },
+                    { data: 'region', width: '35%' },
+                    {
+                        data: 'id',
+                        orderable: false,
+                        width: '15%',
+                        className: 'text-end',
+                        render: function(id) {
+                            return `<button class="btn btn-sm btn-action-edit"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-action-delete"><i class="bi bi-trash"></i></button>`;
+                        }
+                    }
+                ],
                 language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json' },
-                columnDefs: [{ orderable: false, targets: -1 }],
                 initComplete: function() {
-                    $('#tableDepartements_wrapper .dataTables_filter').css('flex', '1').css('text-align', 'center');
-                    $('#tableDepartements_wrapper .dataTables_length').after(
-                        $('#tableDepartements_wrapper .dataTables_filter')
-                    );
-                    $('#tableDepartements_wrapper .dataTables_filter').after(
-                        '<button class="btn btn-sm btn-vintage" data-bs-toggle="modal" data-bs-target="#modalNouveauDepartement"><i class="bi bi-plus-lg"></i> Nouveau département</button>'
-                    );
+                    const wrapper = $('#tableDepartements_wrapper');
+                    const length = wrapper.find('.dataTables_length').detach();
+                    const filter = wrapper.find('.dataTables_filter').detach();
+
+                    const toolbar = $('<div class="dt-custom-toolbar"></div>');
+                    toolbar.append(length);
+                    toolbar.append(filter);
+                    toolbar.append('<a href="#" class="btn btn-sm btn-vintage" data-bs-toggle="modal" data-bs-target="#modalNouveauDepartement"><i class="bi bi-plus-lg"></i> Nouveau département</a>');
+
+                    wrapper.prepend(toolbar);
                 }
             });
 
-            $('#tableVilles').DataTable({
+            // =====================
+            // VILLES
+            // =====================
+            const tableVilles = $('#tableVilles').DataTable({
+                ajax: {
+                    url: '{{ path("app_data_villes") }}',
+                    dataSrc: ''
+                },
+                columns: [
+                    { data: 'nom', width: '45%' },
+                    { data: 'departement', width: '40%' },
+                    {
+                        data: 'id',
+                        orderable: false,
+                        width: '15%',
+                        className: 'text-end',
+                        render: function(id) {
+                            return `<button class="btn btn-sm btn-action-edit"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-action-delete"><i class="bi bi-trash"></i></button>`;
+                        }
+                    }
+                ],
                 language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json' },
-                columnDefs: [{ orderable: false, targets: -1 }],
                 initComplete: function() {
-                    $('#tableVilles_wrapper .dataTables_filter').css('flex', '1').css('text-align', 'center');
-                    $('#tableVilles_wrapper .dataTables_length').after(
-                        $('#tableVilles_wrapper .dataTables_filter')
-                    );
-                    $('#tableVilles_wrapper .dataTables_filter').after(
-                        '<button class="btn btn-sm btn-vintage" data-bs-toggle="modal" data-bs-target="#modalNouvelleVille"><i class="bi bi-plus-lg"></i> Nouvelle ville</button>'
-                    );
+                    const wrapper = $('#tableVilles_wrapper');
+                    const length = wrapper.find('.dataTables_length').detach();
+                    const filter = wrapper.find('.dataTables_filter').detach();
+
+                    const toolbar = $('<div class="dt-custom-toolbar"></div>');
+                    toolbar.append(length);
+                    toolbar.append(filter);
+                    toolbar.append('<a href="#" class="btn btn-sm btn-vintage" data-bs-toggle="modal" data-bs-target="#modalNouvelleVille"><i class="bi bi-plus-lg"></i> Nouvelle ville</a>');
+
+                    wrapper.prepend(toolbar);
                 }
             });
+
+            // =====================
+            // SOUMISSION FORMULAIRES
+            // =====================
+
+            // Région
+            $('#modalNouvelleRegion_form').on('submit', function(e) {
+                console.log('🛑 submit région intercepté');
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ path("app_region_new") }}',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function() {
+                        $('#modalNouvelleRegion').modal('hide');
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        $('#modalNouvelleRegion_form')[0].reset();
+                        tableRegions.ajax.reload();
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                        alert('Erreur lors de la création.');
+                    }
+                });
+            });
+
+            // Département
+            $('#modalNouveauDepartement_form').on('submit', function(e) {
+                console.log('🛑 submit département intercepté');
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ path("app_departement_new") }}',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function() {
+                        $('#modalNouveauDepartement').modal('hide');
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        $('#modalNouveauDepartement_form')[0].reset();
+                        tableDepartements.ajax.reload();
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                        alert('Erreur lors de la création.');
+                    }
+                });
+            });
+
+            // Ville
+            $('#modalNouvelleVille_form').on('submit', function(e) {
+                console.log('🛑 submit ville intercepté');
+                e.preventDefault();
+                $.ajax({
+                    url: '{{ path("app_ville_new") }}',
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    success: function() {
+                        $('#modalNouvelleVille').modal('hide');
+                        $('body').removeClass('modal-open');
+                        $('.modal-backdrop').remove();
+                        $('#modalNouvelleVille_form')[0].reset();
+                        tableVilles.ajax.reload();
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                        alert('Erreur lors de la création.');
+                    }
+                });
+            });
+
+
         });
-
-        {% set reopen = app.request.query.get('reopen') %}
-        {% if reopen %}
-        window.addEventListener('load', function () {
-            const modals = {
-                'region': 'modalNouvelleRegion',
-                'departement': 'modalNouveauDepartement',
-                'ville': 'modalNouvelleVille',
-            };
-            const modalId = modals['{{ reopen }}'];
-            if (modalId) {
-                const modalEl = document.getElementById(modalId);
-                if (modalEl) {
-                    new bootstrap.Modal(modalEl).show();
-                }
-            }
-        });
-        {% endif %}
-
-
     </script>
 {% endblock %}

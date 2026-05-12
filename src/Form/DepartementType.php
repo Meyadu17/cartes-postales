@@ -28,6 +28,7 @@ class DepartementType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Departement::class,
+            'csrf_protection' => false,
         ]);
     }
 }
