@@ -20,6 +20,15 @@ $(document).ready(function() {
         urlRegionEdit:      $('#app-config').data('url-region-edit'),
         urlDepartementEdit: $('#app-config').data('url-departement-edit'),
         urlVilleEdit:       $('#app-config').data('url-ville-edit'),
+
+        // Suppression
+        urlRegionDelete:            $('#app-config').data('url-region-delete'),
+        urlDepartementDelete:       $('#app-config').data('url-departement-delete'),
+        urlVilleDelete:             $('#app-config').data('url-ville-delete'),
+
+        // Dépendances
+        urlRegionDependances:       $('#app-config').data('url-region-dependances'),
+        urlDepartementDependances:  $('#app-config').data('url-departement-dependances'),
     };
 
     // =====================
@@ -92,10 +101,11 @@ $(document).ready(function() {
             { data: 'nom', width: '70%' },
             {
                 data: 'id', orderable: false, width: '15%', className: 'text-end',
-                render: function(id) {
+                render: function(id, type, row) {
                     return `<button class="btn btn-sm btn-action-edit" data-id="${id}"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-action-delete" data-id="${id}"><i class="bi bi-trash"></i></button>`;
+                            <button class="btn btn-sm btn-action-delete" data-id="${id}" data-nom="${row.nom}" data-type="region"><i class="bi bi-trash"></i></button>`;
                 }
+
             }
         ],
         language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json' },
@@ -121,9 +131,9 @@ $(document).ready(function() {
             { data: 'region', width: '35%' },
             {
                 data: 'id', orderable: false, width: '15%', className: 'text-end',
-                render: function(id) {
+                render: function(id, type, row) {
                     return `<button class="btn btn-sm btn-action-edit" data-id="${id}"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-action-delete" data-id="${id}"><i class="bi bi-trash"></i></button>`;
+                            <button class="btn btn-sm btn-action-delete" data-id="${id}" data-nom="${row.nom}" data-type="departement"><i class="bi bi-trash"></i></button>`;
                 }
             }
         ],
@@ -149,9 +159,9 @@ $(document).ready(function() {
             { data: 'departement', width: '40%' },
             {
                 data: 'id', orderable: false, width: '15%', className: 'text-end',
-                render: function(id) {
+                render: function(id, type, row) {
                     return `<button class="btn btn-sm btn-action-edit" data-id="${id}"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-action-delete" data-id="${id}"><i class="bi bi-trash"></i></button>`;
+                            <button class="btn btn-sm btn-action-delete" data-id="${id}" data-nom="${row.nom}" data-type="ville"><i class="bi bi-trash"></i></button>`;
                 }
             }
         ],
@@ -294,5 +304,85 @@ $(document).ready(function() {
             }
         });
     });
+
+    // =====================
+    // SUPPRESSION
+    // =====================
+    let suppressionUrl = null;
+
+    $(document).on('click', '.btn-action-delete', function() {
+        const id   = $(this).data('id');
+        const nom  = $(this).data('nom');
+        const type = $(this).data('type');
+
+        const modal       = new bootstrap.Modal('#modalConfirmSupression');
+        const message     = document.getElementById('suppressionMessage');
+        const dependances = document.getElementById('suppressionDependances');
+
+        message.innerHTML = `Attention, vous vous apprêtez à supprimer <strong>${nom}</strong>. Cette action est irréversible. Êtes-vous sûr de ce choix ?`;
+        dependances.innerHTML = '';
+
+        if (type === 'region') {
+            suppressionUrl = config.urlRegionDelete.replace('__ID__', id);
+
+            fetch(config.urlRegionDependances.replace('__ID__', id))
+                .then(r => r.json())
+                .then(data => {
+                    if (data.departements && data.departements.length > 0) {
+                        let html = '<div class="alert alert-warning mt-2"><strong>Dépendances :</strong><ul class="mb-0 mt-1">';
+                        data.departements.forEach(dept => {
+                            html += `<li><strong>${dept.nom}</strong>`;
+                            if (dept.villes.length > 0) {
+                                html += '<ul>';
+                                dept.villes.forEach(v => { html += `<li>${v}</li>`; });
+                                html += '</ul>';
+                            }
+                            html += '</li>';
+                        });
+                        html += '</ul></div>';
+                        dependances.innerHTML = html;
+                    }
+                });
+
+        } else if (type === 'departement') {
+            suppressionUrl = config.urlDepartementDelete.replace('__ID__', id);
+
+            fetch(config.urlDepartementDependances.replace('__ID__', id))
+                .then(r => r.json())
+                .then(data => {
+                    if (data.villes && data.villes.length > 0) {
+                        let html = '<div class="alert alert-warning mt-2"><strong>Villes concernées :</strong><ul class="mb-0 mt-1">';
+                        data.villes.forEach(v => { html += `<li>${v}</li>`; });
+                        html += '</ul></div>';
+                        dependances.innerHTML = html;
+                    }
+                });
+
+        } else if (type === 'ville') {
+            suppressionUrl = config.urlVilleDelete.replace('__ID__', id);
+        }
+
+        modal.show();
+    });
+
+    document.getElementById('btnConfirmerSuppression').addEventListener('click', function() {
+        if (!suppressionUrl) return;
+
+        fetch(suppressionUrl, { method: 'DELETE' })
+            .then(r => r.json())
+            .then(data => {
+                closeModal('#modalConfirmSupression');
+                showToast('Suppression effectuée !');
+                tableRegions.ajax.reload();
+                tableDepartements.ajax.reload();
+                tableVilles.ajax.reload();
+                suppressionUrl = null;
+            })
+            .catch(err => {
+                console.error('Erreur suppression:', err);
+                alert('Erreur lors de la suppression.');
+            });
+    });
+
 
 });

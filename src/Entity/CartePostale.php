@@ -42,6 +42,10 @@ class CartePostale
     #[ORM\JoinColumn(nullable: false)]
     private ?Region $region = null;
 
+    #[ORM\ManyToOne(targetEntity: Departement::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?Departement $departement = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -159,4 +163,16 @@ class CartePostale
     {
         $this->dateCreation = new \DateTimeImmutable();
     }
+
+    public function getDepartement(): ?Departement
+    {
+        return $this->departement;
+    }
+
+    public function setDepartement(?Departement $departement): static
+    {
+        $this->departement = $departement;
+        return $this;
+    }
+
 }

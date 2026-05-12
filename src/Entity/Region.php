@@ -24,13 +24,13 @@ class Region
     /**
      * @var Collection<int, departement>
      */
-    #[ORM\OneToMany(targetEntity: Departement::class, mappedBy: 'Region')]
+    #[ORM\OneToMany(targetEntity: Departement::class, mappedBy: 'region', cascade: ['remove'])]
     private Collection $departements;
 
     /**
      * @var Collection<int, cartePostale>
      */
-    #[ORM\OneToMany(targetEntity: CartePostale::class, mappedBy: 'Region')]
+    #[ORM\OneToMany(targetEntity: CartePostale::class, mappedBy: 'region')]
     private Collection $cartePostales;
 
     #[ORM\Column(length: 10)]

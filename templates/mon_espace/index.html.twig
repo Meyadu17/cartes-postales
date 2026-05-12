@@ -14,6 +14,11 @@
     data-url-region-edit="{{ path('app_region_edit', {'id': '__ID__'}) }}"
     data-url-departement-edit="{{ path('app_departement_edit', {'id': '__ID__'}) }}"
     data-url-ville-edit="{{ path('app_ville_edit', {'id': '__ID__'}) }}"
+    data-url-region-delete="{{ path('admin_api_region_delete', {'id': '__ID__'}) }}"
+    data-url-departement-delete="{{ path('admin_api_departement_delete', {'id': '__ID__'}) }}"
+    data-url-ville-delete="{{ path('admin_api_ville_delete', {'id': '__ID__'}) }}"
+    data-url-region-dependances="{{ path('admin_api_region_dependances', {'id': '__ID__'}) }}"
+    data-url-departement-dependances="{{ path('admin_api_departement_dependances', {'id': '__ID__'}) }}"
 ></div>
 
 
@@ -151,6 +156,11 @@
     modal_id: 'modalEditerVille', 
     modal_title: 'Modifier une ville' 
 } %}
+
+<!-- ------------------------------------------------------ -->
+<!-- ----------- modale Confimation Supression  ----------- -->
+<!-- ------------------------------------------------------ -->
+{% include 'components/_modal_delete.html.twig' %}
 
 {% endblock %}
 

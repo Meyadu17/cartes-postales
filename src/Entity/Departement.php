@@ -28,7 +28,7 @@ class Departement
     /**
      * @var Collection<int, Ville>
      */
-    #[ORM\OneToMany(targetEntity: Ville::class, mappedBy: 'Departement')]
+    #[ORM\OneToMany(targetEntity: Ville::class, mappedBy: 'departement', cascade: ['remove'])]
     private Collection $villes;
 
     public function __construct()

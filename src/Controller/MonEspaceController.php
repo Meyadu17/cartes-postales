@@ -18,6 +18,7 @@ use App\Repository\VilleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+#[Route('/admin/mon-espace')]
 final class MonEspaceController extends AbstractController
 {
     public function __construct(
@@ -30,7 +31,7 @@ final class MonEspaceController extends AbstractController
     // =====================
     // PAGE PRINCIPALE
     // =====================
-    #[Route('/mon-espace', name: 'app_mon_espace')]
+    #[Route('', name: 'app_mon_espace')]
     public function index(): Response
     {
         return $this->render('mon_espace/index.html.twig', [
@@ -51,7 +52,7 @@ final class MonEspaceController extends AbstractController
     // =====================
     // DONNÉES POUR LES DATATABLES
     // =====================
-    #[Route('/mon-espace/data/regions', name: 'app_data_regions')]
+    #[Route('/data/regions', name: 'app_data_regions')]
     public function dataRegions(): JsonResponse
     {
         $data = array_map(fn($r) => [
@@ -63,7 +64,7 @@ final class MonEspaceController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/mon-espace/data/departements', name: 'app_data_departements')]
+    #[Route('/data/departements', name: 'app_data_departements')]
     public function dataDepartements(): JsonResponse
     {
         $data = array_map(fn($d) => [
@@ -76,7 +77,7 @@ final class MonEspaceController extends AbstractController
         return $this->json($data);
     }
 
-    #[Route('/mon-espace/data/villes', name: 'app_data_villes')]
+    #[Route('/data/villes', name: 'app_data_villes')]
     public function dataVilles(): JsonResponse
     {
         $data = array_map(fn($v) => [
@@ -91,7 +92,7 @@ final class MonEspaceController extends AbstractController
     // =====================
     // CRÉATION
     // =====================
-    #[Route('/mon-espace/region', name: 'app_region_new', methods: ['POST'])]
+    #[Route('/region', name: 'app_region_new', methods: ['POST'])]
     public function newRegion(Request $request): JsonResponse
     {
         $region = new Region();
@@ -106,7 +107,7 @@ final class MonEspaceController extends AbstractController
         return $this->json(['success' => false], 400);
     }
 
-    #[Route('/mon-espace/departement', name: 'app_departement_new', methods: ['POST'])]
+    #[Route('/departement', name: 'app_departement_new', methods: ['POST'])]
     public function newDepartement(Request $request): JsonResponse
     {
         $departement = new Departement();
@@ -121,7 +122,7 @@ final class MonEspaceController extends AbstractController
         return $this->json(['success' => false], 400);
     }
 
-    #[Route('/mon-espace/ville', name: 'app_ville_new', methods: ['POST'])]
+    #[Route('/ville', name: 'app_ville_new', methods: ['POST'])]
     public function newVille(Request $request): JsonResponse
     {
         $ville = new Ville();
@@ -139,7 +140,7 @@ final class MonEspaceController extends AbstractController
     // =====================
     // MODIFICATION
     // =====================
-    #[Route('/mon-espace/region/{id}/edit', name: 'app_region_edit', methods: ['GET', 'POST'])]
+    #[Route('/region/{id}/edit', name: 'app_region_edit', methods: ['GET', 'POST'])]
     public function editRegion(Request $request, Region $region): Response
     {
         $form = $this->createForm(RegionType::class, $region);
@@ -158,7 +159,7 @@ final class MonEspaceController extends AbstractController
         ]);
     }
 
-    #[Route('/mon-espace/departement/{id}/edit', name: 'app_departement_edit', methods: ['GET', 'POST'])]
+    #[Route('/departement/{id}/edit', name: 'app_departement_edit', methods: ['GET', 'POST'])]
     public function editDepartement(Request $request, Departement $departement): Response
     {
         $form = $this->createForm(DepartementType::class, $departement);
@@ -177,7 +178,7 @@ final class MonEspaceController extends AbstractController
         ]);
     }
 
-    #[Route('/mon-espace/ville/{id}/edit', name: 'app_ville_edit', methods: ['GET', 'POST'])]
+    #[Route('/ville/{id}/edit', name: 'app_ville_edit', methods: ['GET', 'POST'])]
     public function editVille(Request $request, Ville $ville): Response
     {
         $form = $this->createForm(VilleType::class, $ville);
@@ -194,6 +195,68 @@ final class MonEspaceController extends AbstractController
             'modal_title' => 'Editer une ville',
             'action_url'  => $this->generateUrl('app_ville_edit', ['id' => $ville->getId()]),
         ]);
+    }
+
+    // =====================
+    // SUPRESSION
+    // =====================
+    #[Route('/suppression/region/{id}', name: 'admin_api_region_delete', methods: ['DELETE'])]
+    public function regionDelete(Region $region): JsonResponse
+    {
+        $this->em->remove($region);
+        $this->em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+    #[Route('/suppression/departement/{id}', name: 'admin_api_departement_delete', methods: ['DELETE'])]
+    public function departementDelete(Departement $departement): JsonResponse
+    {
+        $this->em->remove($departement);
+        $this->em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+    #[Route('/suppression/ville/{id}', name: 'admin_api_ville_delete', methods: ['DELETE'])]
+    public function villeDelete(Ville $ville): JsonResponse
+    {
+        $this->em->remove($ville);
+        $this->em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+    #[Route('/suppression/region/{id}/dependances', name: 'admin_api_region_dependances')]
+    public function regionDependances(Region $region): JsonResponse
+    {
+        $data = [
+            'departements' => [],
+        ];
+
+        foreach ($region->getDepartements() as $dept) {
+            $villes = [];
+            foreach ($dept->getVilles() as $ville) {
+                $villes[] = $ville->getNom();
+            }
+            $data['departements'][] = [
+                'nom' => $dept->getNom(),
+                'villes' => $villes,
+            ];
+        }
+
+        return $this->json($data);
+    }
+
+    #[Route('/suppression/departement/{id}/dependances', name: 'admin_api_departement_dependances')]
+    public function departementDependances(Departement $departement): JsonResponse
+    {
+        $villes = [];
+        foreach ($departement->getVilles() as $ville) {
+            $villes[] = $ville->getNom();
+        }
+
+        return $this->json(['villes' => $villes]);
     }
 
 }
