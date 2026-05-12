@@ -1,9 +1,0 @@
-{
-  "phases": {
-    "extensions": {
-      "commands": [
-        "install-php-extensions ctype iconv pdo_mysql intl"
-      ]
-    }
-  }
-}
