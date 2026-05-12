@@ -239,6 +239,25 @@
                 }
             });
         });
+
+        {% set reopen = app.request.query.get('reopen') %}
+        {% if reopen %}
+        window.addEventListener('load', function () {
+            const modals = {
+                'region': 'modalNouvelleRegion',
+                'departement': 'modalNouveauDepartement',
+                'ville': 'modalNouvelleVille',
+            };
+            const modalId = modals['{{ reopen }}'];
+            if (modalId) {
+                const modalEl = document.getElementById(modalId);
+                if (modalEl) {
+                    new bootstrap.Modal(modalEl).show();
+                }
+            }
+        });
+        {% endif %}
+
+
     </script>
 {% endblock %}
-

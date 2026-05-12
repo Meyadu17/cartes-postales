@@ -35,8 +35,14 @@ final class MonEspaceController extends AbstractController
         // Redirection après la validation
         if ($formRegion->isSubmitted() && $formRegion->isValid()) {
             $this->regionRepository->save($region, true);
+
+            if ($request->request->get('action') === 'save_and_new') {
+                return $this->redirect($this->generateUrl('app_mon_espace', ['reopen' => 'region']) . '#region');
+            }
+
             return $this->redirect($this->generateUrl('app_mon_espace') . '#region');
         }
+
         // Fin du formulaire de création de région
 
         // Formulaire création département
@@ -47,6 +53,11 @@ final class MonEspaceController extends AbstractController
         // Redirection après la validation
         if ($formDepartement->isSubmitted() && $formDepartement->isValid()) {
             $this->departementRepository->save($departement, true);
+
+            if ($request->request->get('action') === 'save_and_new') {
+                return $this->redirect($this->generateUrl('app_mon_espace', ['reopen' => 'departement']) . '#departement');
+            }
+
             return $this->redirect($this->generateUrl('app_mon_espace') . '#departement');
         }
         // Fin du formulaire de création de département
@@ -59,8 +70,14 @@ final class MonEspaceController extends AbstractController
         // Redirection après la validation
         if ($formVille->isSubmitted() && $formVille->isValid()) {
             $this->villeRepository->save($ville, true);
+
+            if ($request->request->get('action') === 'save_and_new') {
+                return $this->redirect($this->generateUrl('app_mon_espace', ['reopen' => 'ville']) . '#ville');
+            }
+
             return $this->redirect($this->generateUrl('app_mon_espace') . '#ville');
         }
+
         // Fin du formulaire de création de ville
 
         return $this->render('mon_espace/index.html.twig', [
@@ -73,5 +90,4 @@ final class MonEspaceController extends AbstractController
             'form_ville' => $formVille,
         ]);
     }
-
 }
