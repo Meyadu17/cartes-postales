@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Departement;
 use App\Entity\Region;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,6 +21,10 @@ class DepartementType extends AbstractType
                 'class' => Region::class,
                 'choice_label' => 'nom',
                 'placeholder' => 'Choisir une région',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('r')
+                        ->orderBy('r.nom', 'ASC');
+                },
             ])
         ;
     }

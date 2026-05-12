@@ -191,6 +191,7 @@ table.dataTable thead th {
     padding-right: 1.5em;
     padding-left: 0;
     text-align: left;
+    position:static !important;
 }
 
 table.dataTable thead .sorting:before,
