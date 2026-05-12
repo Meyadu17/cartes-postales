@@ -5,7 +5,22 @@ $(document).ready(function() {
     // =====================
     // LECTURE DES URLS
     // =====================
-    const config = document.getElementById('app-config').dataset;
+    const config = {
+        // Listes (DataTables)
+        urlRegions:         $('#app-config').data('url-regions'),
+        urlDepartements:    $('#app-config').data('url-departements'),
+        urlVilles:          $('#app-config').data('url-villes'),
+
+        // Création
+        urlRegionNew:       $('#app-config').data('url-region-new'),
+        urlDepartementNew:  $('#app-config').data('url-departement-new'),
+        urlVilleNew:        $('#app-config').data('url-ville-new'),
+
+        // Édition
+        urlRegionEdit:      $('#app-config').data('url-region-edit'),
+        urlDepartementEdit: $('#app-config').data('url-departement-edit'),
+        urlVilleEdit:       $('#app-config').data('url-ville-edit'),
+    };
 
     // =====================
     // TOAST
@@ -78,8 +93,8 @@ $(document).ready(function() {
             {
                 data: 'id', orderable: false, width: '15%', className: 'text-end',
                 render: function(id) {
-                    return `<button class="btn btn-sm btn-action-edit"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-action-delete"><i class="bi bi-trash"></i></button>`;
+                    return `<button class="btn btn-sm btn-action-edit" data-id="${id}"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-action-delete" data-id="${id}"><i class="bi bi-trash"></i></button>`;
                 }
             }
         ],
@@ -107,8 +122,8 @@ $(document).ready(function() {
             {
                 data: 'id', orderable: false, width: '15%', className: 'text-end',
                 render: function(id) {
-                    return `<button class="btn btn-sm btn-action-edit"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-action-delete"><i class="bi bi-trash"></i></button>`;
+                    return `<button class="btn btn-sm btn-action-edit" data-id="${id}"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-action-delete" data-id="${id}"><i class="bi bi-trash"></i></button>`;
                 }
             }
         ],
@@ -135,8 +150,8 @@ $(document).ready(function() {
             {
                 data: 'id', orderable: false, width: '15%', className: 'text-end',
                 render: function(id) {
-                    return `<button class="btn btn-sm btn-action-edit"><i class="bi bi-pencil"></i></button>
-                            <button class="btn btn-sm btn-action-delete"><i class="bi bi-trash"></i></button>`;
+                    return `<button class="btn btn-sm btn-action-edit" data-id="${id}"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-action-delete" data-id="${id}"><i class="bi bi-trash"></i></button>`;
                 }
             }
         ],
@@ -153,7 +168,7 @@ $(document).ready(function() {
     });
 
     // =====================
-    // DÉTECTION DU BOUTON CLIQUÉ
+    // DÉTECTION DU BOUTON CLIQUÉ (CRÉATION)
     // =====================
     $(document).on('click', '[type="submit"][name="action"]', function(e) {
         e.preventDefault();
@@ -171,6 +186,113 @@ $(document).ready(function() {
         } else if (form.attr('id') === 'modalNouvelleVille_form') {
             submitForm('#modalNouvelleVille_form', '#modalNouvelleVille', config.urlVilleNew, tableVilles, 'Ville créée !', keepOpen);
         }
+    });
+
+    // =====================
+    // ÉDITION - RÉGIONS
+    // =====================
+    $('#tableRegions').on('click', '.btn-action-edit', function() {
+        const id = $(this).data('id');
+        const url = config.urlRegionEdit.replace('__ID__', id);
+
+        $.get(url, function(html) {
+            const content = $(html).find('.modal-content');
+            $('#modalEditerRegion .modal-content').html(content.html());
+            $('#modalEditerRegion').data('edit-url', url); // ← stocker l'URL
+            $('#modalEditerRegion').modal('show');
+        });
+    });
+
+    $('#modalEditerRegion').on('submit', 'form', function(e) {
+        e.preventDefault();
+        const url = $('#modalEditerRegion').data('edit-url'); // ← récupérer l'URL
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                closeModal('#modalEditerRegion');
+                showToast('Région modifiée !');
+                tableRegions.ajax.reload();
+            },
+            error: function(xhr) {
+                const content = $(xhr.responseText).find('.modal-content');
+                $('#modalEditerRegion .modal-content').html(content.html());
+            }
+        });
+    });
+
+
+
+    // =====================
+    // ÉDITION - DÉPARTEMENTS
+    // =====================
+    $('#tableDepartements').on('click', '.btn-action-edit', function() {
+        const id = $(this).data('id');
+        const url = config.urlDepartementEdit.replace('__ID__', id);
+
+        $.get(url, function(html) {
+            const content = $(html).find('.modal-content');
+            $('#modalEditerDepartement .modal-content').html(content.html());
+            $('#modalEditerDepartement').data('edit-url', url); // ← stocker l'URL
+            $('#modalEditerDepartement').modal('show');
+        });
+    });
+
+    $('#modalEditerDepartement').on('submit', 'form', function(e) {
+        e.preventDefault();
+        const url = $('#modalEditerDepartement').data('edit-url'); // ← récupérer l'URL
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                closeModal('#modalEditerDepartement');
+                showToast('Département modifiée !');
+                tableDepartements.ajax.reload();
+            },
+            error: function(xhr) {
+                const content = $(xhr.responseText).find('.modal-content');
+                $('#modalEditerDepartement .modal-content').html(content.html());
+            }
+        });
+    });
+
+    // =====================
+    // ÉDITION - VILLES
+    // =====================
+    $('#tableVilles').on('click', '.btn-action-edit', function() {
+        const id = $(this).data('id');
+        const url = config.urlVilleEdit.replace('__ID__', id);
+
+        $.get(url, function(html) {
+            const content = $(html).find('.modal-content');
+            $('#modalEditerVille .modal-content').html(content.html());
+            $('#modalEditerVille').data('edit-url', url); // ← stocker l'URL
+            $('#modalEditerVille').modal('show');
+        });
+    });
+
+    $('#modalEditerVille').on('submit', 'form', function(e) {
+        e.preventDefault();
+        const url = $('#modalEditerVille').data('edit-url'); // ← récupérer l'URL
+
+        $.ajax({
+            url: url,
+            method: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                closeModal('#modalEditerVille');
+                showToast('Ville modifiée !');
+                tableVilles.ajax.reload();
+            },
+            error: function(xhr) {
+                const content = $(xhr.responseText).find('.modal-content');
+                $('#modalEditerVille .modal-content').html(content.html());
+            }
+        });
     });
 
 });

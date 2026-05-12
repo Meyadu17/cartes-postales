@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\RegionRepository;
 use App\Repository\DepartementRepository;
 use App\Repository\VilleRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class MonEspaceController extends AbstractController
@@ -23,6 +24,7 @@ final class MonEspaceController extends AbstractController
         private RegionRepository $regionRepository,
         private DepartementRepository $departementRepository,
         private VilleRepository $villeRepository,
+        private EntityManagerInterface $em,
     ) {}
 
     // =====================
@@ -35,12 +37,16 @@ final class MonEspaceController extends AbstractController
             'regions'          => $this->regionRepository->findAll(),
             'departements'     => $this->departementRepository->findAll(),
             'villes'           => $this->villeRepository->findAll(),
+
             'form_region'      => $this->createForm(RegionType::class, new Region())->createView(),
             'form_departement' => $this->createForm(DepartementType::class, new Departement())->createView(),
             'form_ville'       => $this->createForm(VilleType::class, new Ville())->createView(),
+
+            'form_region_edit' =>  $this->createForm(RegionType::class, new Region())->createView(),
+            'form_departement_edit' => $this->createForm(DepartementType::class, new Departement())->createView(),
+            'form_ville_edit' => $this->createForm(VilleType::class, new Ville())->createView(),
         ]);
     }
-
 
     // =====================
     // DONNÉES POUR LES DATATABLES
@@ -129,4 +135,65 @@ final class MonEspaceController extends AbstractController
 
         return $this->json(['success' => false], 400);
     }
+
+    // =====================
+    // MODIFICATION
+    // =====================
+    #[Route('/mon-espace/region/{id}/edit', name: 'app_region_edit', methods: ['GET', 'POST'])]
+    public function editRegion(Request $request, Region $region): Response
+    {
+        $form = $this->createForm(RegionType::class, $region);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->flush();
+            return $this->json(['success' => true]);
+        }
+
+        return $this->render('components/_edit_form.html.twig', [
+            'form'        => $form->createView(),
+            'modal_id'    => 'modalEditerRegion',
+            'modal_title' => 'Modifier une région',
+            'action_url'  => $this->generateUrl('app_region_edit', ['id' => $region->getId()]),
+        ]);
+    }
+
+    #[Route('/mon-espace/departement/{id}/edit', name: 'app_departement_edit', methods: ['GET', 'POST'])]
+    public function editDepartement(Request $request, Departement $departement): Response
+    {
+        $form = $this->createForm(DepartementType::class, $departement);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->flush();
+            return $this->json(['success' => true]);
+        }
+
+        return $this->render('components/_edit_form.html.twig', [
+            'form'        => $form->createView(),
+            'modal_id'    => 'modalEditerDepartement',
+            'modal_title' => 'Editer un département',
+            'action_url'  => $this->generateUrl('app_departement_edit', ['id' => $departement->getId()]),
+        ]);
+    }
+
+    #[Route('/mon-espace/ville/{id}/edit', name: 'app_ville_edit', methods: ['GET', 'POST'])]
+    public function editVille(Request $request, Ville $ville): Response
+    {
+        $form = $this->createForm(VilleType::class, $ville);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->em->flush();
+            return $this->json(['success' => true]);
+        }
+
+        return $this->render('components/_edit_form.html.twig', [
+            'form'        => $form->createView(),
+            'modal_id'    => 'modalEditerVille',
+            'modal_title' => 'Editer une ville',
+            'action_url'  => $this->generateUrl('app_ville_edit', ['id' => $ville->getId()]),
+        ]);
+    }
+
 }

@@ -10,31 +10,20 @@
 
             {# CORPS - formulaire Symfony #}
             {{ form_start(form, {'attr': {'id': modal_id ~ '_form'}}) }}
-
                 <div class="modal-body">
                     {% for field in form %}
-                        {% if not field.rendered %}
                             <div class="form-floating mb-3">
                                 {{ form_widget(field, {'attr': {'class': 'form-control', 'placeholder': field.vars.label}}) }}
                                 {{ form_label(field) }}
                                 {{ form_errors(field) }}
                             </div>
-                        {% endif %}
                     {% endfor %}
-
                 </div>
 
                 {# PIED - boutons #}
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Annuler
-                    </button>
-                    <button type="submit" name="action" value="save_and_new" class="btn btn-outline-vintage">
-                        Enregistrer et créer à nouveau
-                    </button>
-                    <button type="submit" name="action" value="save" class="btn btn-vintage">
-                        Enregistrer
-                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-vintage">Valider</button>
                 </div>
             {{ form_end(form) }}
         </div>

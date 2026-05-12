@@ -11,6 +11,9 @@
     data-url-region-new="{{ path('app_region_new') }}"
     data-url-departement-new="{{ path('app_departement_new') }}"
     data-url-ville-new="{{ path('app_ville_new') }}"
+    data-url-region-edit="{{ path('app_region_edit', {'id': '__ID__'}) }}"
+    data-url-departement-edit="{{ path('app_departement_edit', {'id': '__ID__'}) }}"
+    data-url-ville-edit="{{ path('app_ville_edit', {'id': '__ID__'}) }}"
 ></div>
 
 
@@ -96,7 +99,7 @@
 </div>
 
 <!-- ------------------------------------------------------- -->
-<!-- -------------------- modale Région -------------------- -->
+<!-- ----------------- modale créer Région ----------------- -->
 <!-- ------------------------------------------------------- -->
 {% include 'components/_modal_form.html.twig' with {
     modal_id: 'modalNouvelleRegion',
@@ -105,7 +108,7 @@
 } %}
 
 <!-- ---------------------------------------------------------- -->
-<!-- ------------------- modale Département ------------------- -->
+<!-- ---------------- modale créer Département ---------------- -->
 <!-- ---------------------------------------------------------- -->
 {% include 'components/_modal_form.html.twig' with {
     modal_id: 'modalNouveauDepartement',
@@ -114,12 +117,39 @@
 } %}
 
 <!-- ------------------------------------------------------ -->
-<!-- -------------------- modale Ville -------------------- -->
+<!-- ----------------- modale créer Ville ----------------- -->
 <!-- ------------------------------------------------------ -->
 {% include 'components/_modal_form.html.twig' with {
     modal_id: 'modalNouvelleVille',
     modal_title: 'Nouvelle Ville',
     form: form_ville
+} %}
+
+<!-- ------------------------------------------------------ -->
+<!-- --------------- modale Modifier Région --------------- -->
+<!-- ------------------------------------------------------ -->
+{% include 'components/_edit_form.html.twig' with { 
+    form: form_region_edit, 
+    modal_id: 'modalEditerRegion', 
+    modal_title: 'Modifier une région' 
+} %}
+
+<!-- ------------------------------------------------------ -->
+<!-- ------------- modale Modifier Département ------------ -->
+<!-- ------------------------------------------------------ -->
+{% include 'components/_edit_form.html.twig' with { 
+    form: form_departement_edit, 
+    modal_id: 'modalEditerDepartement', 
+    modal_title: 'Modifier un département' 
+} %}
+
+<!-- ------------------------------------------------------ -->
+<!-- --------------- modale Modifier Ville --------------- -->
+<!-- ------------------------------------------------------ -->
+{% include 'components/_edit_form.html.twig' with { 
+    form: form_ville_edit, 
+    modal_id: 'modalEditerVille', 
+    modal_title: 'Modifier une ville' 
 } %}
 
 {% endblock %}
