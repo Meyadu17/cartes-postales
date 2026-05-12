@@ -4,4 +4,45 @@
 
 {% block body %}
     <h1>Bienvenue sur ma collection de Cartes Postales !</h1>
+
+    <div class="container my-5">
+        <h2 class="text-muted mb-4">Choix de la police — sélection en cours</h2>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+
+            {% set fonts = [
+                {nom: 'Edu AU', famille: 'Edu AU VIC WA NT Hand'},
+                {nom: 'Playwrite Argentina', famille: 'Playwrite AR'},
+                {nom: 'Playwrite England', famille: 'Playwrite GB S'},
+                {nom: 'Pacifico', famille: 'Pacifico'},
+                {nom: 'Lobster Two', famille: 'Lobster Two'},
+            ] %}
+
+            {% for font in fonts %}
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/images/icons/exemple-h-1.jpg" class="card-img-top" alt="Carte postale exemple">
+                    <div class="card-body">
+                        <h5 class="card-title" style="font-family: '{{ font.famille }}', cursive;">
+                            Bienvenue sur ma collection de Cartes Postales !
+                        </h5>
+                        <p class="card-text" style="font-family: '{{ font.famille }}'">
+                            Une belle carte postale ancienne de l'Île d'Oléron.
+                        </p>
+                    </div>
+                    <ul class="list-group list-group-flush" class="card-text" style="font-family: '{{ font.famille }}'">
+                        <li class="list-group-item"><i class="bi bi-geo-alt"></i> Oléron</li>
+                        <li class="list-group-item"><i class="bi bi-calendar"></i> 1920</li>
+                        <li class="list-group-item"><i class="bi bi-fonts"></i> {{ font.nom }}</li>
+                    </ul>
+                    <div class="card-body">
+                        <a href="#" class="card-link" class="card-text" style="font-family: '{{ font.famille }}'">Voir la carte</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
 {% endblock %}
