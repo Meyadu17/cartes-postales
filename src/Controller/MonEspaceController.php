@@ -32,10 +32,10 @@ final class MonEspaceController extends AbstractController
         $formRegion = $this->createForm(RegionType::class, $region);
         $formRegion->handleRequest($request);
 
+        // Redirection après la validation
         if ($formRegion->isSubmitted() && $formRegion->isValid()) {
             $this->regionRepository->save($region, true);
-
-            return $this->redirectToRoute('app_mon_espace');
+            return $this->redirect($this->generateUrl('app_mon_espace') . '#region');
         }
         // Fin du formulaire de création de région
 
@@ -44,9 +44,10 @@ final class MonEspaceController extends AbstractController
         $formDepartement = $this->createForm(DepartementType::class, $departement);
         $formDepartement->handleRequest($request);
 
+        // Redirection après la validation
         if ($formDepartement->isSubmitted() && $formDepartement->isValid()) {
             $this->departementRepository->save($departement, true);
-            return $this->redirectToRoute('app_mon_espace');
+            return $this->redirect($this->generateUrl('app_mon_espace') . '#departement');
         }
         // Fin du formulaire de création de département
 
@@ -55,9 +56,10 @@ final class MonEspaceController extends AbstractController
         $formVille = $this->createForm(VilleType::class, $ville);
         $formVille->handleRequest($request);
 
+        // Redirection après la validation
         if ($formVille->isSubmitted() && $formVille->isValid()) {
             $this->villeRepository->save($ville, true);
-            return $this->redirectToRoute('app_mon_espace');
+            return $this->redirect($this->generateUrl('app_mon_espace') . '#ville');
         }
         // Fin du formulaire de création de ville
 
