@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-// src/Controller/RegionController.php
+
 #[Route('/admin/mon-espace/regions', name: 'app_region_')]
 final class RegionController extends AbstractController
 {
@@ -64,7 +64,7 @@ final class RegionController extends AbstractController
     // =====================
     // SUPPRESSION
     // =====================
-    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+    #[Route('/{id}/delete', name: 'delete', methods: ['DELETE'])]
     public function delete(Region $region): JsonResponse
     {
         $this->em->remove($region);

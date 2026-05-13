@@ -33,20 +33,43 @@ export function submitForm(formId, modalId, url, table, toastMessage, keepOpen, 
 // =====================
 // initialisation formulaire
 // =====================
-export function initEditModal(tableSelector, modalId, urlPattern, tableInstance, toastMessage, showToast, closeModal) {
-    $(tableSelector).on('click', '.btn-action-edit', function() {
+export function initEditModal(tableSelector, modalId, urlPattern, tableInstance, toastMessage, showToast, closeModal, extraFields = {} ) {
+    $(document).on('click', `${tableSelector} .btn-action-edit`, function () {
+    //$(document).on('click', '.btn-action-edit', function () {
+        // Vérifier que le bouton appartient bien à ce tableau
+        if (!$(this).closest('table').is(tableSelector)) return;
+
+        console.log("toto");
         const id  = $(this).data('id');
         const url = urlPattern.replace('__ID__', id);
 
-        $.get(url, function(html) {
-            const content = $(html).find('.modal-content');
-            $(`${modalId} .modal-content`).html(content.html());
+        $.get(url, function (data) {
+            const form = $(`${modalId} form`);
+
+            // Vider les erreurs précédentes
+            form.find('.alert-danger').remove();
+            form.find('.is-invalid').removeClass('is-invalid');
+
+            // Pré-remplir les champs simples (nom, code, description...)
+            Object.keys(data).forEach(function (key) {
+                const field = form.find(`[name$="[${key}]"], [name="${key}"]`);
+                if (field.length) field.val(data[key]);
+            });
+
+            // Pré-remplir les selects d'entités (region, departement...)
+            Object.keys(extraFields).forEach(function (dataKey) {
+                const fieldName = extraFields[dataKey];
+                form.find(`[name$="[${fieldName}]"]`).val(data[dataKey]);
+            });
+
             $(modalId).data('edit-url', url);
             $(modalId).modal('show');
+        }).fail(function(xhr) {
+            console.error('Erreur $.get:', xhr.status, xhr.responseText);
         });
     });
 
-    $(modalId).on('submit', 'form', function(e) {
+    $(modalId).on('submit', 'form', function (e) {
         e.preventDefault();
         const url = $(modalId).data('edit-url');
 
@@ -54,14 +77,23 @@ export function initEditModal(tableSelector, modalId, urlPattern, tableInstance,
             url: url,
             method: 'POST',
             data: $(this).serialize(),
-            success: function() {
+            success: function () {
                 closeModal(modalId);
                 showToast(toastMessage);
                 tableInstance.ajax.reload();
             },
-            error: function(xhr) {
-                const content = $(xhr.responseText).find('.modal-content');
-                $(`${modalId} .modal-content`).html(content.html());
+            error: function (xhr) {
+                const response = xhr.responseJSON;
+                if (response && response.errors) {
+                    $(`${modalId} .alert-danger`).remove();
+                    $(`${modalId} .is-invalid`).removeClass('is-invalid');
+
+                    response.errors.forEach(function (error) {
+                        $(`${modalId} form`).prepend(
+                            `<div class="alert alert-danger">${error}</div>`
+                        );
+                    });
+                }
             }
         });
     });

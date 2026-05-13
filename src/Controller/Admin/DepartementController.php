@@ -61,7 +61,7 @@ final class DepartementController extends AbstractController
     // =====================
     // SUPPRESSION
     // =====================
-    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+    #[Route('/{id}/delete', name: 'delete', methods: ['DELETE'])]
     public function delete(Departement $departement): JsonResponse
     {
         $this->em->remove($departement);

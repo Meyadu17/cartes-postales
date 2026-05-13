@@ -60,7 +60,7 @@ final class VilleController extends AbstractController
     // =====================
     // SUPPRESSION
     // =====================
-    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+    #[Route('/{id}/delete', name: 'delete', methods: ['DELETE'])]
     public function delete(Ville $ville): JsonResponse
     {
         $this->em->remove($ville);
@@ -68,7 +68,6 @@ final class VilleController extends AbstractController
 
         return $this->json(['success' => true]);
     }
-
 
     // =====================
     // MODIFICATION
