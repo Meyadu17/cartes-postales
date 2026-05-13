@@ -7,9 +7,9 @@ $(document).ready(function() {
     // =====================
     const config = {
         // Listes (DataTables)
-        urlRegions:         $('#app-config').data('url-regions'),
-        urlDepartements:    $('#app-config').data('url-departements'),
-        urlVilles:          $('#app-config').data('url-villes'),
+        urlRegions:      $('#app-config').data('url-region-data'),
+        urlDepartements: $('#app-config').data('url-departement-data'),
+        urlVilles:       $('#app-config').data('url-ville-data'),
 
         // Création
         urlRegionNew:       $('#app-config').data('url-region-new'),
@@ -389,4 +389,6 @@ $(document).ready(function() {
     });
 
 
+
+    
 });
