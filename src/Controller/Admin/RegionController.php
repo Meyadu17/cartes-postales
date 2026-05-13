@@ -62,6 +62,34 @@ final class RegionController extends AbstractController
     }
 
     // =====================
+    // SUPPRESSION
+    // =====================
+    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+    public function delete(Region $region): JsonResponse
+    {
+        $this->em->remove($region);
+        $this->em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+    #[Route('/{id}/dependances', name: 'dependances', methods: ['GET'])]
+    public function dependances(Region $region): JsonResponse
+    {
+        $departements = array_map(function ($dept) {
+            return [
+                'nom'    => $dept->getNom(),
+                'villes' => array_map(
+                    fn($ville) => $ville->getNom(),
+                    $dept->getVilles()->toArray()
+                ),
+            ];
+        }, $region->getDepartements()->toArray());
+
+        return $this->json(['departements' => $departements]);
+    }
+
+    // =====================
     // CONSULTER
     // =====================
     #[Route('/{code}', name: 'consult')]
@@ -107,34 +135,6 @@ final class RegionController extends AbstractController
             'success' => false,
             'errors'  => $this->getFormErrors($form),
         ], 422);
-    }
-
-    // =====================
-    // SUPPRESSION
-    // =====================
-    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Region $region): JsonResponse
-    {
-        $this->em->remove($region);
-        $this->em->flush();
-
-        return $this->json(['success' => true]);
-    }
-
-    #[Route('/{id}/dependances', name: 'dependances', methods: ['GET'])]
-    public function dependances(Region $region): JsonResponse
-    {
-        $departements = array_map(function ($dept) {
-            return [
-                'nom'    => $dept->getNom(),
-                'villes' => array_map(
-                    fn($ville) => $ville->getNom(),
-                    $dept->getVilles()->toArray()
-                ),
-            ];
-        }, $region->getDepartements()->toArray());
-
-        return $this->json(['departements' => $departements]);
     }
 
 }

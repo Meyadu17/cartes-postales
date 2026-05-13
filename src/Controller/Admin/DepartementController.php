@@ -21,6 +21,9 @@ final class DepartementController extends AbstractController
         private EntityManagerInterface $em,
     ) {}
 
+    // =====================
+    // DONNÉES
+    // =====================
     #[Route('/data', name: 'data', methods: ['GET'])]
     public function data(): JsonResponse
     {
@@ -34,6 +37,9 @@ final class DepartementController extends AbstractController
         return $this->json($data);
     }
 
+    // =====================
+    // CRÉATION
+    // =====================
     #[Route('/new', name: 'new', methods: ['POST'])]
     public function new(Request $request): JsonResponse
     {
@@ -52,6 +58,32 @@ final class DepartementController extends AbstractController
         ], 422);
     }
 
+    // =====================
+    // SUPPRESSION
+    // =====================
+    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+    public function delete(Departement $departement): JsonResponse
+    {
+        $this->em->remove($departement);
+        $this->em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+    #[Route('/{id}/dependances', name: 'dependances', methods: ['GET'])]
+    public function dependances(Departement $departement): JsonResponse
+    {
+        $villes = array_map(
+            fn($ville) => $ville->getNom(),
+            $departement->getVilles()->toArray()
+        );
+
+        return $this->json(['villes' => $villes]);
+    }
+
+    // =====================
+    // MODIFICATION
+    // =====================
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Departement $departement): JsonResponse
     {
@@ -76,26 +108,6 @@ final class DepartementController extends AbstractController
             'success' => false,
             'errors'  => $this->getFormErrors($form),
         ], 422);
-    }
-
-    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Departement $departement): JsonResponse
-    {
-        $this->em->remove($departement);
-        $this->em->flush();
-
-        return $this->json(['success' => true]);
-    }
-
-    #[Route('/{id}/dependances', name: 'dependances', methods: ['GET'])]
-    public function dependances(Departement $departement): JsonResponse
-    {
-        $villes = array_map(
-            fn($ville) => $ville->getNom(),
-            $departement->getVilles()->toArray()
-        );
-
-        return $this->json(['villes' => $villes]);
     }
 
 }

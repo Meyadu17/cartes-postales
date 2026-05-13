@@ -169,5 +169,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/mon_espace.js') }}"></script>
+    {{ encore_entry_script_tags('mon_espace') }}
 {% endblock %}

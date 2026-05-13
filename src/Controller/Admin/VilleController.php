@@ -21,6 +21,9 @@ final class VilleController extends AbstractController
         private EntityManagerInterface $em,
     ) {}
 
+    // =====================
+    // DONNÉES
+    // =====================
     #[Route('/data', name: 'data', methods: ['GET'])]
     public function data(): JsonResponse
     {
@@ -33,6 +36,9 @@ final class VilleController extends AbstractController
         return $this->json($data);
     }
 
+    // =====================
+    // CRÉATION
+    // =====================
     #[Route('/new', name: 'new', methods: ['POST'])]
     public function new(Request $request): JsonResponse
     {
@@ -51,6 +57,22 @@ final class VilleController extends AbstractController
         ], 422);
     }
 
+    // =====================
+    // SUPPRESSION
+    // =====================
+    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+    public function delete(Ville $ville): JsonResponse
+    {
+        $this->em->remove($ville);
+        $this->em->flush();
+
+        return $this->json(['success' => true]);
+    }
+
+
+    // =====================
+    // MODIFICATION
+    // =====================
     #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Ville $ville): JsonResponse
     {
@@ -76,13 +98,5 @@ final class VilleController extends AbstractController
         ], 422);
     }
 
-    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
-    public function delete(Ville $ville): JsonResponse
-    {
-        $this->em->remove($ville);
-        $this->em->flush();
-
-        return $this->json(['success' => true]);
-    }
 
 }
