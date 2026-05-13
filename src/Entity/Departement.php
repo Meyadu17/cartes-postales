@@ -35,7 +35,7 @@ class Departement
     private ?string $logoUrl = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $logoImage = null;
+    private ?string $logoImage = null; //nom de l'image
 
     public function __construct()
     {
