@@ -38,6 +38,9 @@ class Region
     #[Assert\Length(max: 10, maxMessage: 'Le code ne peut pas dépasser 10 caractères')]
     private ?string $code = null;
 
+#[ORM\Column(type: 'text', nullable: true)]
+private ?string $description = null;
+
     // Constructeur
     public function __construct()
     {
@@ -132,6 +135,18 @@ class Region
     public function setCode(string $code): static
     {
         $this->code = strtoupper(trim($code)); //force la majuscule
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
 
         return $this;
     }

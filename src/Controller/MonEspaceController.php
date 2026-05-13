@@ -58,6 +58,7 @@ final class MonEspaceController extends AbstractController
         $data = array_map(fn($r) => [
             'code' => $r->getCode(),
             'nom'  => $r->getNom(),
+            'description' => $r->getDescription(),
             'id'   => $r->getId(),
         ], $this->regionRepository->findAllOrderedByNom());
 

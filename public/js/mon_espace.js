@@ -99,7 +99,8 @@ $(document).ready(function() {
         order: [[1, 'asc']],
         columns: [
             { data: 'code', width: '15%' },
-            { data: 'nom', width: '70%' },
+            { data: 'nom', width: '30%' },
+            { data: 'description', width: '45%' },
             {
                 data: 'id', orderable: false, width: '15%', className: 'text-end',
                 render: function(id, type, row) {

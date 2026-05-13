@@ -19,8 +19,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
 
     {{ encore_entry_link_tags('app') }}
-    {{ encore_entry_script_tags('app') }}
-
 </head>
 <body>
 
@@ -30,7 +28,6 @@
     <a class="navbar-brand" href="{{ path('app_home') }}">
         <img src="{{ asset('images/icons/logo.png') }}" alt="Logo" height="40">
     </a>
-
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -47,7 +44,7 @@
             <ul class="dropdown-menu">
                 {% for region in regions_menu %}
                     <li>
-                        <a class="dropdown-item" href="/region/{{ region.id }}">
+                        <a class="dropdown-item" href="{{ path('app_region_consult', {code: region.code}) }}">
                             {{ region.nom }}
                         </a>
                     </li>

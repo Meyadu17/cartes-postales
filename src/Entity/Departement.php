@@ -31,6 +31,12 @@ class Departement
     #[ORM\OneToMany(targetEntity: Ville::class, mappedBy: 'departement', cascade: ['remove'])]
     private Collection $villes;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $logoUrl = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $logoImage = null;
+
     public function __construct()
     {
         $this->villes = new ArrayCollection();
@@ -103,6 +109,30 @@ class Departement
                 $ville->setDepartement(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLogoUrl(): ?string
+    {
+        return $this->logoUrl;
+    }
+
+    public function setLogoUrl(?string $logoUrl): static
+    {
+        $this->logoUrl = $logoUrl;
+
+        return $this;
+    }
+
+    public function getLogoImage(): ?string
+    {
+        return $this->logoImage;
+    }
+
+    public function setLogoImage(?string $logoImage): static
+    {
+        $this->logoImage = $logoImage;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Region;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,6 +24,11 @@ class RegionType extends AbstractType
                 'required' => true,  // ← doit être true
                 'attr' => ['placeholder' => 'Code',
                  'style' => 'text-transform: uppercase'],
+            ])
+            ->add('description', TextareaType::class, [
+                'label' => 'Description',
+                'required' => false,
+                'attr' => ['placeholder' => 'Description'],
             ]);
 
     }
