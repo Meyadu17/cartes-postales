@@ -22,13 +22,28 @@ export function initDepartements(config) {
         // Définition des colonnes
         columns: [
             // Code du département
-            { data: 'code', width: '10%' },
+            { data: 'code', width: '8%' },
 
             // Nom du département
-            { data: 'nom', width: '40%' },
+            { data: 'nom', width: '32%' },
 
             // Région associée
-            { data: 'region', width: '35%' },
+            { data: 'region', width: '30%' },
+
+            // Logo du département
+            {data: 'logoNom',
+                orderable: false,
+                width: '10%',
+                className: 'text-center',
+                render: function(logoNom, type, row) {
+                    if (logoNom) {
+                        return `<img src="/uploads/departements/${logoNom}"
+                                    alt="logo ${row.nom}"
+                                    style="width: 32px; height: 32px; object-fit: contain;">`;
+                    }
+                    return '<span class="text-muted">—</span>';
+                }
+            },
 
             // Colonne actions (édition / suppression)
             {

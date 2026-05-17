@@ -2,26 +2,80 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
+            {# EN-TÊTE #}
             <div class="modal-header">
                 <h5 class="modal-title">{{ modal_title }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
+            {# CORPS - formulaire Symfony #}
             {{ form_start(form, {'attr': {'id': modal_id ~ '_form'}}) }}
+
                 <div class="modal-body">
-                    {% for field in form %}
-                        <div class="form-floating mb-3">
-                            {{ form_widget(field, {'attr': {'class': 'form-control', 'placeholder': field.vars.label}}) }}
-                            {{ form_label(field) }}
-                            {{ form_errors(field) }}
+
+                    {# ZONE CROP — affichée uniquement si with_crop == true #}
+                    {% if with_crop is defined and with_crop %}
+                    <div class="mb-3">
+
+                        <label class="form-label">Logo du département</label>
+
+                        {# Preview logo existant — alimenté par modal-edit.js #}
+                        <div class="mb-2">
+                            <img id="{{ modal_id }}_current_logo"
+                                 src=""
+                                 alt="logo actuel"
+                                 class="img-thumbnail d-none"
+                                 style="max-height: 80px;">
                         </div>
+
+                        {# Bouton choisir image #}
+                        <input type="file"
+                               id="{{ modal_id }}_fileInput"
+                               accept="image/*"
+                               class="form-control mb-2">
+
+                        {# Zone de recadrage — cachée tant qu'aucune image n'est choisie #}
+                        <div id="{{ modal_id }}_cropperWrapper" class="d-none mb-2" style="max-height: 350px; overflow: hidden;">
+                            <img id="{{ modal_id }}_cropperImage" src="" alt="Image à recadrer" style="max-width: 100%;">
+                        </div>
+
+                        {# Aperçu du résultat final #}
+                        <div id="{{ modal_id }}_previewWrapper" class="d-none mb-2">
+                            <label class="form-label text-muted">Aperçu (rendu final)</label>
+                            <div id="{{ modal_id }}_cropperPreview" style="
+                                width: 150px;
+                                height: 150px;
+                                overflow: hidden;
+                                border: 2px solid #C4A882;
+                                border-radius: 4px;">
+                            </div>
+                        </div>
+
+                        {# Champ caché — contiendra le base64 généré par le crop #}
+                        {{ form_widget(form.logoBase64) }}
+
+                    </div>
+                    {% endif %}
+
+                    {# CHAMPS NORMAUX du formulaire #}
+                    {% for field in form %}
+                        {% if not field.rendered %}
+                            <div class="form-floating mb-3">
+                                {{ form_widget(field, {'attr': {'class': 'form-control', 'placeholder': field.vars.label}}) }}
+                                {{ form_label(field) }}
+                                {{ form_errors(field) }}
+                            </div>
+                        {% endif %}
                     {% endfor %}
+
                 </div>
 
+                {# PIED - boutons #}
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <button type="submit" class="btn btn-vintage">Enregistrer</button>
                 </div>
+
             {{ form_end(form) }}
 
         </div>

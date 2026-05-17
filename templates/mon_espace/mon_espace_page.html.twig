@@ -82,6 +82,7 @@
                         <th>Code</th>
                         <th>Nom</th>
                         <th>Région</th>
+                        <th>Logo</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
@@ -122,7 +123,8 @@
 {% include 'components/_modal_form.html.twig' with {
     modal_id: 'modalNouveauDepartement',
     modal_title: 'Nouveau Département',
-    form: form_departement
+    form: form_departement,
+    with_crop: true
 } %}
 
 <!-- ------------------------------------------------------ -->
@@ -149,7 +151,9 @@
 {% include 'components/_edit_form.html.twig' with { 
     form: form_departement_edit, 
     modal_id: 'modalEditerDepartement', 
-    modal_title: 'Modifier un département' 
+    modal_title: 'Modifier un département',
+    with_crop: true,
+    entity_logo_nom: null
 } %}
 
 <!-- ------------------------------------------------------ -->
