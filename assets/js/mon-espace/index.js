@@ -3,11 +3,12 @@
 // =====================
 import { readConfig }       from './config.js';
 import { showToast }        from './toast.js';
-import { closeModal, submitForm, initEditModal } from './modal.js';
 import { initRegions }      from './regions.js';
 import { initDepartements } from './departements.js';
 import { initVilles }       from './villes.js';
 import { initSuppression }  from './suppression.js';
+import { closeModal, submitForm } from './modal.js';
+import { initEditModal } from './modal-edit.js';
 
 $(document).ready(function() {
     console.log('📌 document ready exécuté');
@@ -37,41 +38,42 @@ $(document).ready(function() {
     console.log('✏️ Initialisation des modales d\'édition...');
 
     // Édition région
-    initEditModal(
-        '#tableRegions',
-        '#editRegionModal',
-        '/admin/mon-espace/regions/__ID__/edit',
-        tables.regions,
-        'Région modifiée avec succès',
+    initEditModal({
+        tableSelector: '#tableRegions',
+        modalId:       '#modalEditerRegion',
+        urlPattern:    config.urlRegionEdit,
+        tableInstance: tables.regions,
+        toastMessage:  'Région modifiée avec succès',
         showToast,
-        closeModal
-    );
+        closeModal,
+    });
+
     console.log('   ✅ Modale édition régions initialisée');
 
     // Édition département (avec select région)
-    initEditModal(
-        '#tableDepartements',
-        '#editDepartementModal',
-        '/admin/mon-espace/departements/__ID__/edit',
-        tables.departements,
-        'Département modifié avec succès',
+    initEditModal({
+        tableSelector: '#tableDepartements',
+        modalId:       '#modalEditerDepartement',
+        urlPattern:    config.urlDepartementEdit,
+        tableInstance: tables.departements,
+        toastMessage:  'Département modifié avec succès',
         showToast,
         closeModal,
-        { regionId: 'region' }  // clé data JSON => nom du champ select dans le formulaire
-    );
+        extraFields: { regionId: 'region' },
+    });
     console.log('   ✅ Modale édition départements initialisée');
 
     // Édition ville (avec select département)
-    initEditModal(
-        '#tableVilles',
-        '#editVilleModal',
-        '/admin/mon-espace/villes/__ID__/edit',
-        tables.villes,
-        'Ville modifiée avec succès',
+    initEditModal({
+        tableSelector: '#tableVilles',
+        modalId:       '#modalEditerVille',
+        urlPattern:    config.urlVilleEdit,
+        tableInstance: tables.villes,
+        toastMessage:  'Ville modifiée avec succès',
         showToast,
         closeModal,
-        { departementId: 'departement' }  // clé data JSON => nom du champ select dans le formulaire
-    );
+        extraFields: { departementId: 'departement' },
+    });
     console.log('   ✅ Modale édition villes initialisée');
 
     // =====================

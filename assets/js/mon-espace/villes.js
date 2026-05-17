@@ -34,7 +34,6 @@ export function initVilles(config) {
                 width: '15%',
                 className: 'text-end',
                 render: function(id, type, row) {
-                    console.log(`   🏗️ Rendu actions pour ville id=${id}, nom="${row.nom}"`);
                     return `
                         <button class="btn btn-sm btn-action-edit"
                                 data-id="${id}"

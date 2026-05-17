@@ -2,30 +2,28 @@
     <div class="modal-dialog">
         <div class="modal-content">
 
-            {# EN-TÊTE #}
             <div class="modal-header">
                 <h5 class="modal-title">{{ modal_title }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            {# CORPS - formulaire Symfony #}
             {{ form_start(form, {'attr': {'id': modal_id ~ '_form'}}) }}
                 <div class="modal-body">
                     {% for field in form %}
-                            <div class="form-floating mb-3">
-                                {{ form_widget(field, {'attr': {'class': 'form-control', 'placeholder': field.vars.label}}) }}
-                                {{ form_label(field) }}
-                                {{ form_errors(field) }}
-                            </div>
+                        <div class="form-floating mb-3">
+                            {{ form_widget(field, {'attr': {'class': 'form-control', 'placeholder': field.vars.label}}) }}
+                            {{ form_label(field) }}
+                            {{ form_errors(field) }}
+                        </div>
                     {% endfor %}
                 </div>
 
-                {# PIED - boutons #}
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-vintage">Valider</button>
+                    <button type="submit" class="btn btn-vintage">Enregistrer</button>
                 </div>
             {{ form_end(form) }}
+
         </div>
     </div>
 </div>
