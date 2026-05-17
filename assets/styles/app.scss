@@ -165,6 +165,18 @@ $danger: #8B3A3A;
     }
 }
 
+.btn-outline-vintage {
+    background-color: lighten($accent, 5%);
+    border-color: $accent;
+    color: $bg-main;  // blanc cassé #F5F0E8
+
+    &:hover {
+        background-color: lighten($accent, 10%);
+        border-color: $accent;
+        color: $bg-main;
+    }
+}
+
 .btn-action-delete {
     background-color: $danger;
     border-color: $danger;
