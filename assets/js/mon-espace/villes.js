@@ -2,8 +2,6 @@
 // VILLES
 // =====================
 export function initVilles(config) {
-    console.log('📊 initVilles appelé');
-    console.log('   URL ajax :', config.urlVilles);
 
     return $('#tableVilles').DataTable({
         // URL de récupération des données
@@ -59,14 +57,11 @@ export function initVilles(config) {
 
         // Après initialisation complète du tableau
         initComplete: function() {
-            console.log('✅ DataTable villes initialisée');
-
             const wrapper = $('#tableVilles_wrapper');
 
             // Déplacer les contrôles natifs (longueur + filtre) dans une barre personnalisée
             const length = wrapper.find('.dataTables_length').detach();
             const filter = wrapper.find('.dataTables_filter').detach();
-            console.log('   🔧 Contrôles natifs détachés (length, filter)');
 
             // Créer la barre d'outils personnalisée
             const toolbar = $('<div class="dt-custom-toolbar"></div>');
@@ -81,11 +76,9 @@ export function initVilles(config) {
                     <i class="bi bi-plus-lg"></i> Nouvelle ville
                 </a>
             `);
-            console.log('   ➕ Bouton "Nouvelle ville" ajouté à la toolbar');
 
             // Insérer la barre en haut du wrapper
             wrapper.prepend(toolbar);
-            console.log('   ✅ Toolbar insérée dans le wrapper');
         }
     });
 }

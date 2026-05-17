@@ -16,13 +16,10 @@ let deptCropper = null;
 let deptEditCropper = null;
 
 $(document).ready(function() {
-    console.log('📌 document ready exécuté');
-
     // =====================
     // CONFIGURATION
     // =====================
     const config = readConfig();
-    console.log('⚙️ Configuration chargée :', config);
 
     // =====================
     // CROPPER DÉPARTEMENT
@@ -52,8 +49,6 @@ $(document).ready(function() {
     // =====================
     // INITIALISATION DES MODALES D'ÉDITION
     // =====================
-    console.log('✏️ Initialisation des modales d\'édition...');
-
     initEditModal({
         tableSelector: '#tableRegions',
         modalId:       '#modalEditerRegion',
@@ -63,7 +58,6 @@ $(document).ready(function() {
         showToast,
         closeModal,
     });
-    console.log('   ✅ Modale édition régions initialisée');
 
     initEditModal({
         tableSelector: '#tableDepartements',
@@ -78,8 +72,6 @@ $(document).ready(function() {
         logoUrlKey:  'logoUrl',
     });
 
-    console.log('   ✅ Modale édition départements initialisée');
-
     initEditModal({
         tableSelector: '#tableVilles',
         modalId:       '#modalEditerVille',
@@ -90,13 +82,10 @@ $(document).ready(function() {
         closeModal,
         extraFields: { departementId: 'departement' },
     });
-    console.log('   ✅ Modale édition villes initialisée');
 
     // =====================
     // CRÉATION
     // =====================
-    console.log('➕ Initialisation des boutons de création...');
-
     const map = {
         'modalNouvelleRegion_form':     { modal: '#modalNouvelleRegion',     url: config.urlRegionNew,      table: tables.regions,      msg: 'Région créée !' },
         'modalNouveauDepartement_form': { modal: '#modalNouveauDepartement', url: config.urlDepartementNew, table: tables.departements, msg: 'Département créé !' },
@@ -111,21 +100,12 @@ $(document).ready(function() {
         const formId   = form.attr('id');
         const keepOpen = action === 'save_and_new';
 
-        console.log(`🖱️ Bouton submit cliqué`);
-        console.log(`   action   : ${action}`);
-        console.log(`   formId   : ${formId}`);
-        console.log(`   keepOpen : ${keepOpen}`);
-
         // Si c'est le formulaire département, on injecte le base64 avant envoi
-        if (formId === 'modalNouveauDepartement_form') {
-            console.log('   🖼️ Injection base64 du crop département...');
-            deptCropper.injectBase64();
-        }
+        if (formId === 'modalNouveauDepartement_form') { deptCropper.injectBase64(); }
 
         const entry = map[formId];
 
         if (entry) {
-            console.log(`   ✅ Entrée trouvée dans le map pour "${formId}"`);
             submitForm('#' + formId, entry.modal, entry.url, entry.table, entry.msg, keepOpen, showToast);
         } else {
             console.warn(`   ⚠️ Aucune entrée trouvée dans le map pour le formId : "${formId}"`);
@@ -135,7 +115,5 @@ $(document).ready(function() {
     // =====================
     // SUPPRESSION
     // =====================
-    console.log('🗑️ Initialisation de la suppression...');
     initSuppression(config, tables, showToast, closeModal);
-    console.log('   ✅ Suppression initialisée');
 });

@@ -9,7 +9,6 @@
  * @returns {Object} config - Objet contenant toutes les URLs
  */
 export function readConfig() {
-    console.log('⚙️ readConfig appelé — lecture des data-attributes depuis #app-config');
 
     const config = {
         // ── URLs de récupération des listes (DataTables) ──────────────────
@@ -43,8 +42,6 @@ export function readConfig() {
             console.warn(`   ⚠️ config.${key} est vide ou non défini`);
         }
     });
-
-    console.log('   ✅ Config chargée :', config);
 
     return config;
 }

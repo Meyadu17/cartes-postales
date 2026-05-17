@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: DepartementRepository::class)]
 class Departement
 {
+    public const LOGO_DIR = 'uploads/departements';
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -31,18 +34,24 @@ class Departement
     #[ORM\OneToMany(targetEntity: Ville::class, mappedBy: 'departement', cascade: ['remove'])]
     private Collection $villes;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $logoUrl = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $logoNom
-     = null; //nom de l'image
+    private ?string $logoNom = null; //nom de l'image
 
+    //Constructeur
     public function __construct()
     {
         $this->villes = new ArrayCollection();
     }
 
+    // Getter et Setter
+    public function getLogoPath(): ?string
+    {
+        return $this->logoNom 
+            ? self::LOGO_DIR . '/' . $this->logoNom 
+            : null;
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -110,18 +119,6 @@ class Departement
                 $ville->setDepartement(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getLogoUrl(): ?string
-    {
-        return $this->logoUrl;
-    }
-
-    public function setLogoUrl(?string $logoUrl): static
-    {
-        $this->logoUrl = $logoUrl;
 
         return $this;
     }

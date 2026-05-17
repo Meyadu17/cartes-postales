@@ -19,13 +19,10 @@
         {% for departement in region.departements %}
         <div class="col">
             <div class="card h-100 shadow-sm">
-                <img 
-                    src="{{ departement.logoUrl and departement.logoImage 
-                        ? asset(departement.logoUrl ~ '/' ~ departement.logoImage) 
-                        : asset('images/icons/departement_default.jpg') }}"
-                    alt="{{ departement.nom }}"
-                    style="object-fit: cover; height: 150px;"
+                <img src="{{ departement.logoNom ? asset(departement.logoPath) : asset('images/icons/departement_default.jpg') }}"
+                    alt="Logo du département {{ departement.nom }}" style="object-fit: cover; height: 150px;"
                 >
+
                 <div class="card-body text-center">
                     <h5 class="card-title mb-1">{{ departement.nom }}</h5>
                     <span class="badge bg-secondary">{{ departement.code }}</span>

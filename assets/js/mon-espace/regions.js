@@ -2,9 +2,6 @@
 // RÉGIONS
 // =====================
 export function initRegions(config) {
-    console.log('📊 initRegions appelé');
-    console.log('   URL ajax :', config.urlRegions);
-
     return $('#tableRegions').DataTable({
         // URL de récupération des données
         ajax: {
@@ -59,14 +56,11 @@ export function initRegions(config) {
 
         // Après initialisation complète du tableau
         initComplete: function() {
-            console.log('✅ DataTable régions initialisée');
-
             const wrapper = $('#tableRegions_wrapper');
 
             // Déplacer les contrôles natifs (longueur + filtre) dans une barre personnalisée
             const length = wrapper.find('.dataTables_length').detach();
             const filter = wrapper.find('.dataTables_filter').detach();
-            console.log('   🔧 Contrôles natifs détachés (length, filter)');
 
             // Créer la barre d'outils personnalisée
             const toolbar = $('<div class="dt-custom-toolbar"></div>');
@@ -81,11 +75,9 @@ export function initRegions(config) {
                     <i class="bi bi-plus-lg"></i> Nouvelle région
                 </a>
             `);
-            console.log('   ➕ Bouton "Nouvelle région" ajouté à la toolbar');
 
             // Insérer la barre en haut du wrapper
             wrapper.prepend(toolbar);
-            console.log('   ✅ Toolbar insérée dans le wrapper');
         }
     });
 }

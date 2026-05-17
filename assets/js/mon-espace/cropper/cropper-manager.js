@@ -49,7 +49,6 @@ export class CropperManager {
 
     // Appelé avant le submit
     getCroppedBase64() {
-        console.log("this.cropper =", this.cropper);
         if (!this.cropper) return null;
         return this.cropper.getCroppedCanvas({
             width: this.options.outputWidth,
@@ -59,7 +58,6 @@ export class CropperManager {
 
     injectBase64() {
         const base64 = this.getCroppedBase64();
-        console.log("Je suis dans injectBase64 de cropper-manager et base64 = ", base64)
         if (base64 && this.base64Input) {
             this.base64Input.value = base64;
         }
