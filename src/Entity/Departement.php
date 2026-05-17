@@ -35,7 +35,8 @@ class Departement
     private ?string $logoUrl = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $logoImage = null; //nom de l'image
+    private ?string $logoNom
+     = null; //nom de l'image
 
     public function __construct()
     {
@@ -125,14 +126,14 @@ class Departement
         return $this;
     }
 
-    public function getLogoImage(): ?string
+    public function getLogoNom(): ?string
     {
-        return $this->logoImage;
+        return $this->logoNom;
     }
 
-    public function setLogoImage(?string $logoImage): static
+    public function setLogoNom(?string $logoNom): static
     {
-        $this->logoImage = $logoImage;
+        $this->logoNom = $logoNom;
 
         return $this;
     }
