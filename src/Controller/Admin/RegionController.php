@@ -101,7 +101,7 @@ final class RegionController extends AbstractController
             throw $this->createNotFoundException('Région introuvable');
         }
 
-        return $this->render('region/index.html.twig', [
+        return $this->render('region/region_page.html.twig', [
             'region' => $region,
         ]);
     }

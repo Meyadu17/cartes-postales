@@ -29,7 +29,7 @@ final class MonEspaceController extends AbstractController
     #[Route('', name: 'index')]
     public function index(): Response
     {
-        return $this->render('mon_espace/index.html.twig', [
+        return $this->render('mon_espace/mon_espace_page.html.twig', [
             // Formulaires création
             'form_region'           => $this->createForm(RegionType::class, new Region())->createView(),
             'form_departement'      => $this->createForm(DepartementType::class, new Departement())->createView(),

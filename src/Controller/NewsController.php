@@ -11,7 +11,7 @@ final class NewsController extends AbstractController
     #[Route('/news', name: 'app_news')]
     public function index(): Response
     {
-        return $this->render('news/index.html.twig', [
+        return $this->render('news/news_page.html.twig', [
             'controller_name' => 'NewsController',
         ]);
     }
