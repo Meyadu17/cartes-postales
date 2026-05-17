@@ -9,10 +9,11 @@ import { initVilles }       from './villes.js';
 import { initSuppression }  from './suppression.js';
 import { closeModal, submitForm } from './modal.js';
 import { initEditModal }    from './modal-edit.js';
-import { initDeptCropper }  from './cropper/dept-cropper.js';
+import { initDeptCropper, initDeptEditCropper }  from './cropper/dept-cropper.js';
 
 
 let deptCropper = null;
+let deptEditCropper = null;
 
 $(document).ready(function() {
     console.log('📌 document ready exécuté');
@@ -30,18 +31,15 @@ $(document).ready(function() {
     // et Cropper.js a besoin que l'image soit visible pour calculer ses dimensions.
     // =====================
     deptCropper = initDeptCropper();
-
+    deptEditCropper = initDeptEditCropper();
+    
     // Quand la modale s'ouvre → on initialise le cropper
-    $('#modalNouveauDepartement').on('shown.bs.modal', function () {
-        console.log('🖼️ Modale département ouverte → init cropper');
-        deptCropper.init();
-    });
+    $('#modalNouveauDepartement').on('shown.bs.modal', function () {deptCropper.init();});
+    $('#modalEditerDepartement').on('shown.bs.modal', function () {deptEditCropper.init();});
 
     // Quand la modale se ferme → on détruit le cropper et on remet à zéro
-    $('#modalNouveauDepartement').on('hidden.bs.modal', function () {
-        console.log('🖼️ Modale département fermée → destroy cropper');
-        deptCropper.destroy();
-    });
+    $('#modalNouveauDepartement').on('hidden.bs.modal', function () {deptCropper.destroy();});
+    $('#modalEditerDepartement').on('hidden.bs.modal', function () {deptEditCropper.destroy();});
 
     // =====================
     // INITIALISATION DES DATATABLES
@@ -76,7 +74,10 @@ $(document).ready(function() {
         showToast,
         closeModal,
         extraFields: { regionId: 'region' },
+        cropper:     deptEditCropper,
+        logoUrlKey:  'logoUrl',
     });
+
     console.log('   ✅ Modale édition départements initialisée');
 
     initEditModal({

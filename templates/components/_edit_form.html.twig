@@ -52,7 +52,9 @@
                         </div>
 
                         {# Champ caché — contiendra le base64 généré par le crop #}
-                        {{ form_widget(form.logoBase64) }}
+                        {# On ajoute {'id': modal_id ~ '_logoBase64'} pour avoir un id différent de la creation  #}
+                        {# il faut aussi ajouter '_logoBase64' côté js  #}
+                        {{ form_widget(form.logoBase64, {'id': modal_id ~ '_logoBase64'}) }}
 
                     </div>
                     {% endif %}

@@ -12,3 +12,21 @@ export function initDeptCropper() {
         outputHeight: 400,
     });
 }
+
+export function initDeptEditCropper() {
+    return new CropperManager({
+        aspectRatio: 1,
+        imageElId:       'modalEditerDepartement_cropperImage',
+        base64InputId:   'modalEditerDepartement_logoBase64',
+        fileInputId:     'modalEditerDepartement_fileInput',
+        previewSelector: '#modalEditerDepartement_cropperPreview',
+        wrapperIds: [
+            'modalEditerDepartement_cropperWrapper',
+            'modalEditerDepartement_previewWrapper',
+        ],
+        outputWidth: 400,
+        outputHeight: 400,
+    });
+}
+
+

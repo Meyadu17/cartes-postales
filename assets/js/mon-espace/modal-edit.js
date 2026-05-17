@@ -2,7 +2,7 @@
 // initialisation formulaire
 // =====================
 export function initEditModal(config) {
-    const { tableSelector, modalId, urlPattern, tableInstance, toastMessage, showToast, closeModal, extraFields = {} } = config;
+    const { tableSelector, modalId, urlPattern, tableInstance, toastMessage, showToast, closeModal, extraFields = {}, cropper = null, logoUrlKey = null } = config;
 
     $(document).on('click', `${tableSelector} .btn-action-edit`, function () {
         if (!$(this).closest('table').is(tableSelector)) return;
@@ -29,6 +29,12 @@ export function initEditModal(config) {
                     $form.find(`[name$="[${fieldName}]"]`).val(data[dataKey]);
                 });
 
+                // Affichage du logo existant
+                if (logoUrlKey && data[logoUrlKey]) {
+                    const $img = $modal.find(`[id$="_current_logo"]`);
+                    $img.attr('src', data[logoUrlKey]).removeClass('d-none');
+                }
+
                 $modal.data('edit-url', url);
                 const modal = new bootstrap.Modal(document.querySelector(modalId));
                 modal.show();
@@ -42,6 +48,9 @@ export function initEditModal(config) {
         e.preventDefault();
         const $form = $(this);
         const url   = $(modalId).data('edit-url');
+
+         // 🖼️ Injection base64 si cropper présent
+        if (cropper) cropper.injectBase64();
 
         $.ajax({
             url,
