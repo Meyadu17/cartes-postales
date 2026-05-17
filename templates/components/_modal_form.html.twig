@@ -1,5 +1,5 @@
 <div class="modal fade" id="{{ modal_id }}" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
             {# EN-TÊTE #}
@@ -12,6 +12,42 @@
             {{ form_start(form, {'attr': {'id': modal_id ~ '_form'}}) }}
 
                 <div class="modal-body">
+
+                    {# ZONE CROP — affichée uniquement si with_crop == true #}
+                    {% if with_crop is defined and with_crop %}
+                    <div class="mb-3">
+
+                        {# Bouton choisir image #}
+                        <label class="form-label">Logo du département</label>
+                        <input type="file"
+                               id="dept-logo-input"
+                               accept="image/*"
+                               class="form-control mb-2">
+
+                        {# Zone de recadrage — cachée tant qu'aucune image n'est choisie #}
+                        <div id="cropper-wrapper" class="d-none mb-2" style="max-height: 350px; overflow: hidden;">
+                            <img id="cropper-image" src="" alt="Image à recadrer" style="max-width: 100%;">
+                        </div>
+
+                        {# Aperçu du résultat final #}
+                        <div id="preview-wrapper" class="d-none mb-2">
+                            <label class="form-label text-muted">Aperçu (rendu final)</label>
+                            <div id="cropper-preview" style="
+                                width: 150px;
+                                height: 150px;
+                                overflow: hidden;
+                                border: 2px solid #C4A882;
+                                border-radius: 4px;">
+                            </div>
+                        </div>
+
+                        {# Champ caché — contiendra le base64 généré par le crop #}
+                        {{ form_widget(form.logoBase64) }}
+
+                    </div>
+                    {% endif %}
+
+                    {# CHAMPS NORMAUX du formulaire #}
                     {% for field in form %}
                         {% if not field.rendered %}
                             <div class="form-floating mb-3">

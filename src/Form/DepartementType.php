@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,13 +24,25 @@ class DepartementType extends AbstractType
                 ],
             ])
             ->add('region', EntityType::class, [
-                'class' => Region::class,
-                'choice_label' => 'nom',
-                'placeholder' => 'Choisir une région',
+                'class'         => Region::class,
+                'choice_label'  => 'nom',
+                'label'         => 'Région',
+                'placeholder'   => 'Choisir une région',
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('r')
                         ->orderBy('r.nom', 'ASC');
                 },
+            ])
+            // Champs image — pas mappés directement sur l'entité
+            ->add('logoNom', TextType::class, [
+                'label'    => 'Nom du fichier image',
+                'required' => false,
+                'mapped'   => false,      // ← géré manuellement dans le controller
+                'attr'     => ['placeholder' => 'ex: logo-nord'],
+            ])
+            ->add('logoBase64', HiddenType::class, [
+                'required' => false,
+                'mapped'   => false,      // ← idem
             ])
         ;
     }

@@ -32,4 +32,15 @@ class RegionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findOneByCode(string $code): ?Region
+    {
+        return $this->createQueryBuilder('r')
+            ->leftJoin('r.departements', 'd')
+            ->addSelect('d')
+            ->andWhere('r.code = :code')
+            ->setParameter('code', $code)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

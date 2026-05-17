@@ -5,20 +5,22 @@
 {% block body %}
 <!-- Configuration du script Java Script-->
 <div id="app-config"
-    data-url-regions="{{ path('app_data_regions') }}"
-    data-url-departements="{{ path('app_data_departements') }}"
-    data-url-villes="{{ path('app_data_villes') }}"
+    data-url-region-data="{{ path('app_region_data') }}"
     data-url-region-new="{{ path('app_region_new') }}"
-    data-url-departement-new="{{ path('app_departement_new') }}"
-    data-url-ville-new="{{ path('app_ville_new') }}"
     data-url-region-edit="{{ path('app_region_edit', {'id': '__ID__'}) }}"
+    data-url-region-delete="{{ path('app_region_delete', {'id': '__ID__'}) }}"
+    data-url-region-dependances="{{ path('app_region_dependances', {'id': '__ID__'}) }}"
+
+    data-url-departement-data="{{ path('app_departement_data') }}"
+    data-url-departement-new="{{ path('app_departement_new') }}"
     data-url-departement-edit="{{ path('app_departement_edit', {'id': '__ID__'}) }}"
+    data-url-departement-delete="{{ path('app_departement_delete', {'id': '__ID__'}) }}"
+    data-url-departement-dependances="{{ path('app_departement_dependances', {'id': '__ID__'}) }}"
+
+    data-url-ville-data="{{ path('app_ville_data') }}"
+    data-url-ville-new="{{ path('app_ville_new') }}"
     data-url-ville-edit="{{ path('app_ville_edit', {'id': '__ID__'}) }}"
-    data-url-region-delete="{{ path('admin_api_region_delete', {'id': '__ID__'}) }}"
-    data-url-departement-delete="{{ path('admin_api_departement_delete', {'id': '__ID__'}) }}"
-    data-url-ville-delete="{{ path('admin_api_ville_delete', {'id': '__ID__'}) }}"
-    data-url-region-dependances="{{ path('admin_api_region_dependances', {'id': '__ID__'}) }}"
-    data-url-departement-dependances="{{ path('admin_api_departement_dependances', {'id': '__ID__'}) }}"
+    data-url-ville-delete="{{ path('app_ville_delete', {'id': '__ID__'}) }}"
 ></div>
 
 
@@ -64,6 +66,7 @@
                 <thead>
                     <tr><th>Code</th>
                         <th>Nom</th>
+                        <th>Description</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
@@ -79,6 +82,7 @@
                         <th>Code</th>
                         <th>Nom</th>
                         <th>Région</th>
+                        <th>Logo</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
@@ -92,6 +96,7 @@
                 <thead>
                     <tr>
                         <th>Nom</th>
+                        <th>Code postale</th>
                         <th>Département</th>
                         <th class="text-end">Actions</th>
                     </tr>
@@ -118,7 +123,8 @@
 {% include 'components/_modal_form.html.twig' with {
     modal_id: 'modalNouveauDepartement',
     modal_title: 'Nouveau Département',
-    form: form_departement
+    form: form_departement,
+    with_crop: true
 } %}
 
 <!-- ------------------------------------------------------ -->
@@ -145,7 +151,9 @@
 {% include 'components/_edit_form.html.twig' with { 
     form: form_departement_edit, 
     modal_id: 'modalEditerDepartement', 
-    modal_title: 'Modifier un département' 
+    modal_title: 'Modifier un département',
+    with_crop: true,
+    entity_logo_nom: null
 } %}
 
 <!-- ------------------------------------------------------ -->
@@ -166,5 +174,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('js/mon_espace.js') }}"></script>
+    {{ encore_entry_script_tags('mon_espace') }}
 {% endblock %}

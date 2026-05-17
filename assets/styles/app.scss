@@ -29,7 +29,7 @@ $border:         #C4A882;  // dark beige
 body {
     background-color: $bg-main;
     color: $text-main;
-    font-family: 'Felipa', Arial !important;
+    font-family: 'Playwrite GB S', 'Felipa', Arial !important;
 }
 
 // ===========================
@@ -95,7 +95,6 @@ body {
     }
 }
 
-
 // ===========================
 // BUTTONS
 // ===========================
@@ -115,8 +114,9 @@ body {
 // ===========================
 h1, h2, h3 {
     color: $accent;
-    font-family: 'Felipa', Arial !important;
+    font-family: 'Playwrite GB S', 'Edu AU', 'Felipa', Arial !important;
 }
+
 // ===========================
 // ONGLETS
 // ===========================
@@ -125,7 +125,7 @@ h1, h2, h3 {
 
     .nav-link {
         color: $text-secondary;
-        font-family: 'Felipa', Arial;
+        font-family: 'Playwrite GB S', 'Felipa', Arial;
         border: none;
         border-bottom: 2px solid transparent;
 
@@ -162,6 +162,18 @@ $danger: #8B3A3A;
     &:hover {
         background-color: darken($accent, 10%);
         border-color: darken($accent, 10%);
+        color: $bg-main;
+    }
+}
+
+.btn-outline-vintage {
+    background-color: lighten($accent, 5%);
+    border-color: $accent;
+    color: $bg-main;  // blanc cassé #F5F0E8
+
+    &:hover {
+        background-color: lighten($accent, 10%);
+        border-color: $accent;
         color: $bg-main;
     }
 }
@@ -223,4 +235,3 @@ table.dataTable thead .sorting_desc:after {
     }
     .btn { flex: 0 0 auto; }
 }
-

@@ -1,0 +1,38 @@
+{# templates/region/region_page.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ region.nom }}{% endblock %}
+
+{% block body %}
+<div class="container py-4">
+
+    {# En-tête région #}
+    <div class="mb-4">
+        <h1>{{ region.nom }}</h1>
+        {% if region.description %}
+            <p class="lead text-muted">{{ region.description }}</p>
+        {% endif %}
+    </div>
+
+    {# Liste des départements #}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+        {% for departement in region.departements %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ departement.logoNom ? asset(departement.logoPath) : asset('images/icons/departement_default.jpg') }}"
+                    alt="Logo du département {{ departement.nom }}" style="object-fit: cover; height: 150px;"
+                >
+
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-1">{{ departement.nom }}</h5>
+                    <span class="badge bg-secondary">{{ departement.code }}</span>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <p class="text-muted">Aucun département pour cette région.</p>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
