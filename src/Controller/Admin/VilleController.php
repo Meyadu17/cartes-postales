@@ -30,6 +30,7 @@ final class VilleController extends AbstractController
         $data = array_map(fn(Ville $v) => [
             'id'          => $v->getId(),
             'nom'         => $v->getNom(),
+            'codePostal'  => $v->getCodePostal(),
             'departement' => $v->getDepartement()?->getNom(),
         ], $this->villeRepository->findAllOrderedByNom());
 

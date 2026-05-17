@@ -22,7 +22,10 @@ export function initVilles(config) {
         // Définition des colonnes
         columns: [
             // Nom de la ville
-            { data: 'nom', width: '45%' },
+            { data: 'nom', width: '30%' },
+
+            // Code postale
+            { data: 'codePostal', width: '15%' },
 
             // Département associé
             { data: 'departement', width: '40%' },
