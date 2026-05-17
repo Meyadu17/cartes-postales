@@ -125,6 +125,7 @@ final class DepartementController extends AbstractController
                 'nom'      => $departement->getNom(),
                 'regionId' => $departement->getRegion()?->getId(),
                 'logoNom'  => $departement->getLogoNom(),
+                'logoUrl'  => $departement->getLogoNom() ? '/uploads/departements/' . $departement->getLogoNom() : null,
             ]);
         }
 
