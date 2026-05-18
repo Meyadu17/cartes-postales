@@ -1,3 +1,4 @@
+// cropper-manager.js
 // =====================
 // CROPPER GÉNÉRIQUE (Réutilisable)
 // =====================
@@ -66,5 +67,14 @@ export class CropperManager {
     destroy() {
         this.cropper?.destroy();
         this.cropper = null;
+    }
+
+    setAspectRatio(ratio, outputWidth = null, outputHeight = null) {
+        this.options.aspectRatio = ratio;
+        if (outputWidth)  this.options.outputWidth  = outputWidth;
+        if (outputHeight) this.options.outputHeight = outputHeight;
+
+        // Si un cropper est déjà actif, met à jour son ratio en live
+        this.cropper?.setAspectRatio(ratio);
     }
 }

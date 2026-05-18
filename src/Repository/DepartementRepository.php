@@ -27,9 +27,24 @@ class DepartementRepository extends ServiceEntityRepository
 
     public function findAllOrderedByNom(): array
     {
-        return $this->createQueryBuilder('r')
-            ->orderBy('r.nom', 'ASC')
+        return $this->createQueryBuilder('d')
+            ->orderBy('d.nom', 'ASC')
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllOrderedByCode(): array
+    {
+        return $this->createQueryBuilder('d')
+            ->orderBy('d.code', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function createOrderedByCodeQueryBuilder(): \Doctrine\ORM\QueryBuilder
+    {
+        return $this->createQueryBuilder('d')
+            ->orderBy('d.code', 'ASC');
+    }
 }
+

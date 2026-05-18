@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: CartePostaleRepository::class)]
 class CartePostale
 {
+    public const LOGO_DIR = 'uploads/cartes';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -21,7 +23,7 @@ class CartePostale
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $imageUrl = null;
+    private ?string $logoNom = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $annee = null;
@@ -45,6 +47,19 @@ class CartePostale
     #[ORM\ManyToOne(targetEntity: Departement::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Departement $departement = null;
+
+    public function __construct()
+    {
+        $this->dateCreation = new \DateTimeImmutable();
+    }
+
+    // Getter et Setter
+    public function getLogoPath(): ?string
+    {
+        return $this->logoNom 
+            ? self::LOGO_DIR . '/' . $this->logoNom 
+            : null;
+    }
 
     public function getId(): ?int
     {
@@ -75,14 +90,14 @@ class CartePostale
         return $this;
     }
 
-    public function getImageUrl(): ?string
+    public function getLogoNom(): ?string
     {
-        return $this->imageUrl;
+        return $this->logoNom;
     }
 
-    public function setImageUrl(string $imageUrl): static
+    public function setLogoNom(string $logoNom): static
     {
-        $this->imageUrl = $imageUrl;
+        $this->logoNom = $logoNom;
 
         return $this;
     }
@@ -157,11 +172,6 @@ class CartePostale
         $this->region = $Region;
 
         return $this;
-    }
-
-    public function __construct()
-    {
-        $this->dateCreation = new \DateTimeImmutable();
     }
 
     public function getDepartement(): ?Departement
