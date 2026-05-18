@@ -6,6 +6,7 @@ import { showToast }        from './toast.js';
 import { initRegions }      from './regions.js';
 import { initDepartements } from './departements.js';
 import { initVilles }       from './villes.js';
+import { initPostcards } from './postcards.js';
 import { initSuppression }  from './suppression.js';
 import { closeModal, submitForm } from './modal.js';
 import { initEditModal }    from './modal-edit.js';
@@ -45,6 +46,7 @@ $(document).ready(function() {
     tables.regions      = initRegions(config);
     tables.departements = initDepartements(config);
     tables.villes       = initVilles(config);
+    tables.postcards       = initPostcards(config);
 
     // =====================
     // INITIALISATION DES MODALES D'ÉDITION

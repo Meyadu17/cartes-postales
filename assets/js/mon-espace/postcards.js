@@ -3,15 +3,11 @@
 // CARTES POSTALES
 // =====================
 export function initPostcards(config) {
-
     return $('#tablePostcards').DataTable({
-        // URL de récupération des données
+        // Pas de données pour l'instant
         ajax: {
             url: config.urlPostcards,
-            dataSrc: '',
-            beforeSend: function() {
-                console.log('🔄 Chargement des cartes postales depuis :', config.urlPostcards);
-            }
+            dataSrc: ''
         },
 
         // Tri par défaut sur la colonne "titre" (index 0)
@@ -19,83 +15,29 @@ export function initPostcards(config) {
 
         // Définition des colonnes
         columns: [
-            // Titre
-            { data: 'titre', width: '15%' },
+            { data: 'titre',       width: '20%' },
+            { data: 'annee',       width: '10%' },
+            { data: 'orientation', width: '10%' },
+            { data: 'region',      width: '15%' },
+            { data: 'departement', width: '15%' },
+            { data: 'ville',       width: '15%' },
 
-            // Description (tronquée si trop longue)
+            // Colonne actions (désactivées pour l'instant)
             {
-                data: 'description',
-                width: '25%',
-                render: function(description) {
-                    if (!description) {
-                        return '<span class="text-muted">—</span>';
-                    }
-                    const max = 80;
-                    return description.length > max
-                        ? `<span title="${description.replace(/"/g, '&quot;')}">${description.substring(0, max)}…</span>`
-                        : description;
-                }
-            },
-
-            // Année
-            {
-                data: 'annee',
-                width: '7%',
-                className: 'text-center',
-                render: function(annee) {
-                    return annee ? annee : '<span class="text-muted">—</span>';
-                }
-            },
-
-            // Orientation (paysage / portrait)
-            {
-                data: 'orientation',
-                width: '8%',
-                className: 'text-center',
-                render: function(orientation) {
-                    if (!orientation) {
-                        return '<span class="text-muted">—</span>';
-                    }
-                    const icon = orientation === 'paysage'
-                        ? '<i class="bi bi-image" title="Paysage"></i>'
-                        : '<i class="bi bi-phone" title="Portrait"></i>';
-                    return `${icon} ${orientation}`;
-                }
-            },
-
-            // Ville
-            {
-                data: 'ville',
-                width: '12%',
-                render: function(ville) {
-                    return ville ? ville : '<span class="text-muted">—</span>';
-                }
-            },
-
-            // Département
-            { data: 'departement', width: '12%' },
-
-            // Région
-            { data: 'region', width: '12%' },
-
-            // Colonne actions (édition / suppression)
-            {
-                data: 'id',
+                data: null,
                 orderable: false,
-                width: '9%',
+                width: '15%',
                 className: 'text-end',
-                render: function(id, type, row) {
+                render: function(data, type, row) {
                     return `
                         <button class="btn btn-sm btn-action-edit"
-                                data-id="${id}"
-                                title="Modifier la carte postale ${row.titre}">
+                                disabled
+                                title="Modifier (bientôt disponible)">
                             <i class="bi bi-pencil"></i>
                         </button>
                         <button class="btn btn-sm btn-action-delete"
-                                data-id="${id}"
-                                data-nom="${row.titre}"
-                                data-type="postcard"
-                                title="Supprimer la carte postale ${row.titre}">
+                                disabled
+                                title="Supprimer (bientôt disponible)">
                             <i class="bi bi-trash"></i>
                         </button>`;
                 }
@@ -103,13 +45,16 @@ export function initPostcards(config) {
         ],
 
         // Traduction française
-        language: { url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json' },
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/fr-FR.json',
+            emptyTable: 'Aucune carte postale pour le moment',
+        },
 
         // Après initialisation complète du tableau
         initComplete: function() {
             const wrapper = $('#tablePostcards_wrapper');
 
-            // Déplacer les contrôles natifs (longueur + filtre) dans une barre personnalisée
+            // Déplacer les contrôles natifs dans une barre personnalisée
             const length = wrapper.find('.dataTables_length').detach();
             const filter = wrapper.find('.dataTables_filter').detach();
 
@@ -117,14 +62,12 @@ export function initPostcards(config) {
             const toolbar = $('<div class="dt-custom-toolbar"></div>');
             toolbar.append(length).append(filter);
 
-            // Ajouter le bouton "Nouvelle carte postale"
+            // Bouton "Nouvelle carte postale" (désactivé pour l'instant)
             toolbar.append(`
-                <a href="#"
-                   class="btn btn-sm btn-vintage"
-                   data-bs-toggle="modal"
-                   data-bs-target="#modalNouvellePostcard">
+                <button class="btn btn-sm btn-vintage"
+                        title="Bientôt disponible">
                     <i class="bi bi-plus-lg"></i> Nouvelle carte postale
-                </a>
+                </button>
             `);
 
             // Insérer la barre en haut du wrapper
