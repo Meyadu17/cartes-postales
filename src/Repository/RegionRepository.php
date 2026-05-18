@@ -40,6 +40,7 @@ class RegionRepository extends ServiceEntityRepository
             ->addSelect('d')
             ->andWhere('r.code = :code')
             ->setParameter('code', $code)
+            ->orderBy('d.code', 'ASC')
             ->getQuery()
             ->getOneOrNullResult();
     }
