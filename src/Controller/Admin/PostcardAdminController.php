@@ -3,15 +3,24 @@
 namespace App\Controller\Admin;
 
 use App\Entity\CartePostale;
+use App\Form\CartePostaleType;
 use App\Repository\CartePostaleRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/admin/mon-espace/cartes-postales', name: 'app_postcard_')]
 class PostcardAdminController extends AbstractController
 {
+
+    // =====================
+    // DONNÉES
+    // =====================
     #[Route('/data', name: 'data', methods: ['GET'])]
     public function data(CartePostaleRepository $repo): JsonResponse
     {
@@ -31,5 +40,29 @@ class PostcardAdminController extends AbstractController
 
         return new JsonResponse($data);
     }
-}
 
+    // =====================
+    // CRÉATION
+    // =====================
+    #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $em): Response {
+        $carte = new CartePostale();
+        $form = $this->createForm(CartePostaleType::class, $carte);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $carte->setRegion($carte->getDepartement()->getRegion());
+
+            $em->persist($carte);
+            $em->flush();
+
+            $this->addFlash('success', 'Carte postale ajoutée avec succès.');
+
+            return $this->redirectToRoute('app_postcard_data');
+        }
+
+        return $this->render('admin/postcard_new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+}

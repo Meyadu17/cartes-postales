@@ -21,6 +21,7 @@ export function readConfig() {
         urlRegionNew:              $('#app-config').data('url-region-new'),
         urlDepartementNew:         $('#app-config').data('url-departement-new'),
         urlVilleNew:               $('#app-config').data('url-ville-new'),
+        urlPostcardNew:            $('#app-config').data('url-postcard-new'),
 
         // ── URLs d'édition (formulaires "Modifier...") ────────────────────
         urlRegionEdit:             $('#app-config').data('url-region-edit'),

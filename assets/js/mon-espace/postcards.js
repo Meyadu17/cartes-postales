@@ -64,14 +64,22 @@ export function initPostcards(config) {
 
             // Bouton "Nouvelle carte postale" (désactivé pour l'instant)
             toolbar.append(`
-                <button class="btn btn-sm btn-vintage"
-                        title="Bientôt disponible">
+                <button class="btn btn-sm btn-vintage" id="btn-new-postcard">
                     <i class="bi bi-plus-lg"></i> Nouvelle carte postale
                 </button>
             `);
 
             // Insérer la barre en haut du wrapper
             wrapper.prepend(toolbar);
+
+            // Redirection vers la page de création
+            console.log('initComplete postcards exécuté');
+            console.log('urlPostcardNew =', config.urlPostcardNew);
+
+            $('#btn-new-postcard').on('click', function() {
+                console.log('Clic sur Nouvelle carte postale');
+                window.location.href = config.urlPostcardNew;
+            });
         }
     });
 }

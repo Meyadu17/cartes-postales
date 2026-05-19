@@ -1,9 +1,8 @@
 # Todo - Projet Carte POstale
 
 ## 🔴 Urgent
-- [ ] Enlever le bouton "Nouvelle carte" pour le remplacer par un onglet "Carte postale"
+- [X] Enlever le bouton "Nouvelle carte" pour le remplacer par un onglet "Carte postale"
 - [ ] Faire le CRUD carte postale.
-- [ ] Factoriser la méthodes uploadBase64 et delete des images dans un service ImageUploader.
 
 ## 🟡 À faire
 - [ ] Lors de l'enregsitrement de répartement, en boucle, vider l'image
@@ -17,4 +16,3 @@
 
 ## 💡 Idées
 - [ ] Cacher les boutons de page quand moins de 10 éléments
-
