@@ -7,7 +7,7 @@ use App\Entity\CartePostale;
 use App\Entity\Departement;
 use App\Entity\Region;
 use App\Entity\Ville;
-use App\Form\CartePostaleType;
+use App\Form\PostcardType;
 use App\Form\DepartementType;
 use App\Form\RegionType;
 use App\Form\VilleType;
@@ -36,12 +36,12 @@ final class MonEspaceController extends AbstractController
             'form_region'           => $this->createForm(RegionType::class, new Region())->createView(),
             'form_departement'      => $this->createForm(DepartementType::class, new Departement())->createView(),
             'form_ville'            => $this->createForm(VilleType::class, new Ville())->createView(),
-            'form_postcard'         => $this->createForm(CartePostaleType::class, new CartePostale())->createView(),
+            'form_postcard'         => $this->createForm(PostcardType::class, new CartePostale())->createView(),
             // Formulaires édition (vides, remplis via JS)
             'form_region_edit'      => $this->createForm(RegionType::class, new Region())->createView(),
             'form_departement_edit' => $this->createForm(DepartementType::class, new Departement())->createView(),
             'form_ville_edit'       => $this->createForm(VilleType::class, new Ville())->createView(),
-            'form_postcard_edit'    => $this->createForm(CartePostaleType::class, new CartePostale())->createView(),
+            'form_postcard_edit'    => $this->createForm(PostcardType::class, new CartePostale())->createView(),
         ]);
     }
 }

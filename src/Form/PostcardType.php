@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\CartePostale;
 use App\Entity\Departement;
 use App\Entity\Ville;
+use App\Repository\DepartementRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -17,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class CartePostaleType extends AbstractType
+class PostcardType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -53,9 +54,9 @@ class CartePostaleType extends AbstractType
             ])
             ->add('departement', EntityType::class, [
                 'class' => Departement::class,
-                'choice_label' => 'nom',
+                'choice_label' => fn(Departement $d) => $d->getCode() . ' - ' . $d->getNom(),
                 'label' => 'Département',
-                'required' => false,
+                'query_builder' => fn(DepartementRepository $repo) => $repo->createOrderedByCodeQueryBuilder(),
                 'placeholder' => '-- Sélectionner un département --',
             ])
             ->add('ville', EntityType::class, [

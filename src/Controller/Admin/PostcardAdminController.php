@@ -3,16 +3,14 @@
 namespace App\Controller\Admin;
 
 use App\Entity\CartePostale;
-use App\Form\CartePostaleType;
+use App\Form\PostcardType;
 use App\Repository\CartePostaleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/admin/mon-espace/cartes-postales', name: 'app_postcard_')]
 class PostcardAdminController extends AbstractController
@@ -47,7 +45,7 @@ class PostcardAdminController extends AbstractController
     #[Route('/new', name: 'new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response {
         $carte = new CartePostale();
-        $form = $this->createForm(CartePostaleType::class, $carte);
+        $form = $this->createForm(PostcardType::class, $carte);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
