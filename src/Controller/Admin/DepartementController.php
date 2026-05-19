@@ -64,7 +64,7 @@ final class DepartementController extends AbstractController
             // ENDREGION DEBUG temporaire
 
             if (!empty($base64)) {
-                $logoNom = $this->sauvegarderLogo($base64);
+                $logoNom = $this->sauvegarderLogo($base64, $departement);
 
                 if ($logoNom !== null) {
                     $departement->setLogoNom($logoNom); 
@@ -139,7 +139,7 @@ final class DepartementController extends AbstractController
 
             // On ne traite que si le base64 est une vraie chaîne non vide
             if (!empty($base64)) {
-                $logoNom = $this->sauvegarderLogo($base64);
+                $logoNom = $this->sauvegarderLogo($base64, $departement);
 
                 // sauvegarderLogo() peut retourner null si le base64 est invalide
                 if ($logoNom !== null) {
@@ -171,38 +171,42 @@ final class DepartementController extends AbstractController
      * Décode un base64 et sauvegarde le fichier dans /public/uploads/departements/
      * Retourne le nom du fichier généré.
      */
-    private function sauvegarderLogo(string $base64): ?string
-{
-    // Vérifie que c'est bien un base64 avec data URI
-    if (!str_contains($base64, ',')) {
-        return null;
+    private function sauvegarderLogo(string $base64, Departement $departement): ?string
+    {
+        if (!str_contains($base64, ',')) {
+            return null;
+        }
+
+        $data = explode(',', $base64);
+
+        if (empty($data[1])) {
+            return null;
+        }
+
+        $imageData = base64_decode($data[1]);
+
+        if ($imageData === false) {
+            return null;
+        }
+
+        // Nom basé sur code + nom du département
+        $slug = $departement->getCode() . '_' . $departement->getNom();
+        $slug = strtolower(trim($slug));
+        $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $slug);
+        $slug = preg_replace('/[^a-z0-9_]+/', '_', $slug);
+        $slug = trim($slug, '_');
+
+        $nomFichier = $slug . '.png';
+        $dossier = $this->getParameter('kernel.project_dir') . '/public/uploads/departements/';
+
+        if (!is_dir($dossier)) {
+            mkdir($dossier, 0755, true);
+        }
+
+        file_put_contents($dossier . $nomFichier, $imageData);
+
+        return $nomFichier;
     }
-
-    $data = explode(',', $base64);
-
-    // Vérifie que la partie base64 n'est pas vide
-    if (empty($data[1])) {
-        return null;
-    }
-
-    $imageData = base64_decode($data[1]);
-
-    // Vérifie que le décodage a fonctionné
-    if ($imageData === false) {
-        return null;
-    }
-
-    $nomFichier = uniqid('dept_', true) . '.png';
-    $dossier = $this->getParameter('kernel.project_dir') . '/public/uploads/departements/';
-
-    if (!is_dir($dossier)) {
-        mkdir($dossier, 0755, true);
-    }
-
-    file_put_contents($dossier . $nomFichier, $imageData);
-
-    return $nomFichier;
-}
 
     /**
      * Supprime le fichier logo du disque.

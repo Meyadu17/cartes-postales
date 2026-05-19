@@ -33,19 +33,13 @@ class DepartementType extends AbstractType
                         ->orderBy('r.nom', 'ASC');
                 },
             ])
-            // Champs image — pas mappés directement sur l'entité
-            ->add('logoNom', TextType::class, [
-                'label'    => 'Nom du fichier image',
-                'required' => false,
-                'mapped'   => false,      // ← géré manuellement dans le controller
-                'attr'     => ['placeholder' => 'ex: logo-nord'],
-            ])
             ->add('logoBase64', HiddenType::class, [
                 'required' => false,
-                'mapped'   => false,      // ← idem
+                'mapped'   => false,
             ])
         ;
     }
+
 
     public function configureOptions(OptionsResolver $resolver): void
     {
