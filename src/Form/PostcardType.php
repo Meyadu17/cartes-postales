@@ -12,6 +12,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,6 +21,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -45,16 +47,6 @@ class PostcardType extends AbstractType
                 'label' => 'Année',
                 'required' => false,
             ])
-            ->add('orientation', ChoiceType::class, [
-                'label' => 'Orientation',
-                'choices' => [
-                    'Paysage' => 'paysage',
-                    'Portrait' => 'portrait',
-                ],
-                'constraints' => [
-                    new NotBlank(message: 'L\'orientation est obligatoire'),
-                ],
-            ])
             ->add('enCaroussel', CheckboxType::class, [
                 'label' => 'Afficher dans le carrousel',
                 'required' => false,
@@ -66,7 +58,22 @@ class PostcardType extends AbstractType
                 'query_builder' => fn(DepartementRepository $repo) => $repo->createOrderedByCodeQueryBuilder(),
                 'placeholder' => '-- Sélectionner un département --',
             ])
-            //TODO : Ajouter logoImage
+
+            // Les champs cachés
+            ->add('imageBase64', HiddenType::class, [
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new NotBlank(message: 'Une image est requise'),
+                ],
+            ])
+            ->add('orientation', HiddenType::class, [
+                'required' => false,
+                'constraints' => [
+                    new NotBlank(message: 'L\'orientation est requise'),
+                    new Choice(choices: ['portrait', 'paysage']),
+                ],
+            ])
         ;
 
         // Fonction qui (re)construit le champ ville selon le département
@@ -96,11 +103,7 @@ class PostcardType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) use ($formModifier) {
             $data = $event->getData();
             $departementId = $data['departement'] ?? null;
-
-            $departement = $departementId
-                ? $this->em->getReference(Departement::class, $departementId)
-                : null;
-
+            $departement = $departementId ? $this->em->find(Departement::class, $departementId) : null;
             $formModifier($event->getForm(), $departement);
         });
 

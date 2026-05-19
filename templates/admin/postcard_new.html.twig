@@ -1,3 +1,4 @@
+{# postcard_new.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Nouvelle carte postale{% endblock %}
@@ -5,102 +6,119 @@
 {% block body %}
 <div class="container py-4">
 
-    {# BREADCRUMB #}
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{{ path('app_postcard_data') }}">Cartes postales</a>
-            </li>
-            <li class="breadcrumb-item active">Nouvelle carte postale</li>
-        </ol>
-    </nav>
-
     <div class="card shadow-sm">
         <div class="card-header">
             <h5 class="mb-0">Ajouter une carte postale</h5>
         </div>
 
         {{ form_start(form) }}
-        <div class="card-body">
-            <div class="row g-3">
-
-                {# Titre #}
-                <div class="col-12">
-                    <div class="form-floating">
-                        {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'Titre'}}) }}
-                        {{ form_label(form.titre) }}
-                        {{ form_errors(form.titre) }}
-                    </div>
+            {% if not form.vars.valid and form.vars.submitted %}
+                <div class="alert alert-danger mx-3 mt-3">
+                    Veuillez corriger les erreurs ci-dessous.
                 </div>
+            {% endif %}
 
-                {# Description #}
-                <div class="col-12">
-                    <div class="form-floating">
-                        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Description', 'style': 'height: 120px'}}) }}
-                        {{ form_label(form.description) }}
-                        {{ form_errors(form.description) }}
+            <div class="card-body">
+                <div class="row g-3">
+
+                    {# Champs hidden #}
+                    {{ form_widget(form.orientation) }}
+                    {{ form_widget(form.imageBase64) }}
+
+                    {# Upload image + Cropper #}
+                    <div class="col-12">
+                        <label class="form-label fw-semibold">Image de la carte postale</label>
+
+                        <input type="file" id="postcard-file-input" accept="image/*" class="form-control mb-3">
+
+                        {# Boutons orientation — visibles après upload #}
+                        <div id="orientation-buttons" class="d-none mb-3 d-flex gap-3">
+                            <button type="button" id="btn-portrait" class="btn btn-outline-secondary">
+                                <div style="width:40px;height:60px;border:2px solid currentColor;margin:auto"></div>
+                                Portrait (2:3)
+                            </button>
+                            <button type="button" id="btn-landscape" class="btn btn-outline-secondary">
+                                <div style="width:60px;height:40px;border:2px solid currentColor;margin:auto"></div>
+                                Paysage (3:2)
+                            </button>
+                        </div>
+
+                        {# Zone cropper #}
+                        <div id="cropper-wrapper" class="d-none mb-3">
+                            <img id="postcard-cropper-image" src="" alt="Aperçu" style="max-width:100%">
+                        </div>
+
+                        {# Aperçu cropé #}
+                        <div id="preview-wrapper" class="d-none">
+                            <p class="text-muted small">Aperçu :</p>
+                            <div id="cropper-preview" style="width:150px;height:150px;overflow:hidden"></div>
+                        </div>
                     </div>
-                </div>
 
-                {# Année #}
-                <div class="col-md-4">
-                    <div class="form-floating">
-                        {{ form_widget(form.annee, {'attr': {'class': 'form-control', 'placeholder': 'Année'}}) }}
-                        {{ form_label(form.annee) }}
-                        {{ form_errors(form.annee) }}
+                    {# Titre #}
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'Titre'}}) }}
+                            {{ form_label(form.titre) }}
+                            {{ form_errors(form.titre) }}
+                        </div>
                     </div>
-                </div>
 
-                {# Orientation #}
-                <div class="col-md-4">
-                    <div class="form-floating">
-                        {{ form_widget(form.orientation, {'attr': {'class': 'form-select'}}) }}
-                        {{ form_label(form.orientation) }}
-                        {{ form_errors(form.orientation) }}
+                    {# Description #}
+                    <div class="col-12">
+                        <div class="form-floating">
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Description', 'style': 'height: 120px'}}) }}
+                            {{ form_label(form.description) }}
+                            {{ form_errors(form.description) }}
+                        </div>
                     </div>
-                </div>
 
-                {# Département #}
-                <div class="col-md-4">
-                    <div class="form-floating">
+                    {# Année #}
+                    <div class="col-md-4">
+                        <div class="form-floating">
+                            {{ form_widget(form.annee, {'attr': {'class': 'form-control', 'placeholder': 'Année'}}) }}
+                            {{ form_label(form.annee) }}
+                            {{ form_errors(form.annee) }}
+                        </div>
+                    </div>
+
+                    {# Département #}
+                    <div class="col-md-4">
+                        {{ form_label(form.departement, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
                         {{ form_widget(form.departement, {'attr': {'class': 'form-select'}}) }}
-                        {{ form_label(form.departement) }}
                         {{ form_errors(form.departement) }}
                     </div>
-                </div>
 
-                {# Ville #}
-                <div class="col-md-4 ville-wrapper">
-                    <div class="form-floating">
+                    {# Ville #}
+                    <div class="col-md-4 ville-wrapper">
+                        {{ form_label(form.ville, null, {'label_attr': {'class': 'form-label fw-semibold'}}) }}
                         {{ form_widget(form.ville, {'attr': {'class': 'form-select'}}) }}
-                        {{ form_label(form.ville) }}
                         {{ form_errors(form.ville) }}
                     </div>
-                </div>
 
-                {# Carrousel #}
-                <div class="col-12">
-                    <div class="form-check form-switch">
-                        {{ form_widget(form.enCaroussel, {'attr': {'class': 'form-check-input'}}) }}
-                        {{ form_label(form.enCaroussel, null, {'label_attr': {'class': 'form-check-label'}}) }}
-                        {{ form_errors(form.enCaroussel) }}
+                    {# Carrousel #}
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                            {{ form_widget(form.enCaroussel, {'attr': {'class': 'form-check-input'}}) }}
+                            {{ form_label(form.enCaroussel, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                            {{ form_errors(form.enCaroussel) }}
+                        </div>
                     </div>
+
                 </div>
-
             </div>
-        </div>
 
-        <div class="card-footer d-flex justify-content-end gap-2">
-            <a href="{{ path('app_postcard_data') }}" class="btn btn-secondary">
-                Annuler
-            </a>
-            <button type="submit" name="action" value="save_and_new" class="btn btn-outline-primary">
-                Enregistrer et créer à nouveau
-            </button>
-            <button type="submit" name="action" value="save" class="btn btn-primary">
-                Enregistrer
-            </button>
-        </div>
+            <div class="card-footer d-flex justify-content-end gap-2">
+                <a href="{{ path('app_postcard_data') }}" class="btn btn-secondary">
+                    Annuler
+                </a>
+                <button type="submit" name="action" value="save_and_new" class="btn btn-outline-primary">
+                    Enregistrer et créer à nouveau
+                </button>
+                <button type="submit" name="action" value="save" class="btn btn-primary">
+                    Enregistrer
+                </button>
+            </div>
         {{ form_end(form) }}
 
     </div>

@@ -22,7 +22,7 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('mon_espace', './assets/js/mon-espace/mon-espace.js')
-   .addEntry('postcard-create', './assets/js/mon-espace/postcard-create.js')
+    .addEntry('postcard-create', './assets/js/mon-espace/postcard-create.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()

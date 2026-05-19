@@ -1,8 +1,32 @@
 // postcard-create.js
+import { PostcardCropperManager } from './cropper/postcard-cropper.js';
+
 document.addEventListener('DOMContentLoaded', function () {
     const departementSelect = document.querySelector('#postcard_departement');
     const villeSelect = document.querySelector('#postcard_ville');
     const villeWrapper = document.querySelector('.ville-wrapper');
+
+    const cropperManager = new PostcardCropperManager({
+        imageElId          : 'postcard-cropper-image',
+        fileInputId        : 'postcard-file-input',
+        base64InputId      : 'postcard_imageBase64',
+        orientationInputId : 'postcard_orientation',
+        portraitBtnId      : 'btn-portrait',
+        landscapeBtnId     : 'btn-landscape',
+        wrapperIds         : ['cropper-wrapper', 'preview-wrapper'],
+        previewSelector    : '#cropper-preview',
+        aspectRatio        : 2/3,
+        outputWidth        : 400,
+        outputHeight       : 600,
+        quality            : 0.85,
+    });
+
+    cropperManager.init();
+
+    // Avant submit
+    document.querySelector('#postcard-form')?.addEventListener('submit', () => {
+        cropperManager.injectBase64();
+    });
 
     console.log('departementSelect:', departementSelect);
     console.log('villeSelect:', villeSelect);
