@@ -3,14 +3,14 @@ import { CropperManager } from './cropper-manager.js';
 
 export function initDeptCropper() {
     return new CropperManager({
-        aspectRatio:     1,           // carré
-        imageElId:       'cropper-image-dept',
-        base64InputId:   'logoBase64-departement',
-        fileInputId:     'crop-input-dept',
-        previewSelector: '#cropper-preview-dept',
+        aspectRatio:     1,
+        imageElId:       'cropper-image',
+        base64InputId:   'departement_logoBase64',
+        fileInputId:     'dept-logo-input',
+        previewSelector: '#cropper-preview',
         wrapperIds: [
-            'cropper-wrapper-dept', 
-            'preview-wrapper-dept'
+            'cropper-wrapper', 
+            'preview-wrapper'
         ],
         outputWidth: 400,
         outputHeight: 400,
@@ -20,15 +20,15 @@ export function initDeptCropper() {
 export function initDeptEditCropper() {
     return new CropperManager({
         aspectRatio:     1,
-        imageElId:       'cropper-image-dept-edit',
-        base64InputId:   'logoBase64-departement-edit',
-        fileInputId:     'crop-input-dept-edit',
-        previewSelector: '#cropper-preview-dept-edit',
+        imageElId:       'modalEditerDepartement_cropperImage',
+        base64InputId:   'modalEditerDepartement_logoBase64',
+        fileInputId:     'modalEditerDepartement_fileInput',
+        previewSelector: '#modalEditerDepartement_cropperPreview',
         wrapperIds: [
-            'cropper-wrapper-dept-edit', 
-            'preview-wrapper-dept-edit'
+            'modalEditerDepartement_cropperWrapper', 
+            'modalEditerDepartement_previewWrapper'
         ],
-        outputWidth: 400,
+        outputWidth:  400,
         outputHeight: 400,
     });
 }

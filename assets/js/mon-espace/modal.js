@@ -1,4 +1,4 @@
-// modal.js :
+// je de la modal de création modal.js :
 // =====================
 // fermer modale
 // =====================
