@@ -70,7 +70,7 @@
                 </div>
 
                 {# Ville #}
-                <div class="col-md-4">
+                <div class="col-md-4 ville-wrapper">
                     <div class="form-floating">
                         {{ form_widget(form.ville, {'attr': {'class': 'form-select'}}) }}
                         {{ form_label(form.ville) }}
@@ -105,4 +105,9 @@
 
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('postcard-create') }}
 {% endblock %}

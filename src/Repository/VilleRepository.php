@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Departement;
 use App\Entity\Ville;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,8 +28,18 @@ class VilleRepository extends ServiceEntityRepository
 
     public function findAllOrderedByNom(): array
     {
-        return $this->createQueryBuilder('r')
-            ->orderBy('r.nom', 'ASC')
+        return $this->createQueryBuilder('v')
+            ->orderBy('v.nom', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByDepartementOrderedByNom(Departement $departement): array
+    {
+        return $this->createQueryBuilder('v')
+            ->where('v.departement = :departement')
+            ->setParameter('departement', $departement)
+            ->orderBy('v.nom', 'ASC')
             ->getQuery()
             ->getResult();
     }

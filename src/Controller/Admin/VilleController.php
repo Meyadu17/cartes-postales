@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Controller\Admin\Traits\FormErrorsTrait;
+use App\Entity\Departement;
 use App\Entity\Ville;
 use App\Form\VilleType;
 use App\Repository\VilleRepository;
@@ -33,6 +34,23 @@ final class VilleController extends AbstractController
             'codePostal'  => $v->getCodePostal(),
             'departement' => $v->getDepartement()?->getNom(),
         ], $this->villeRepository->findAllOrderedByNom());
+
+        return $this->json($data);
+    }
+
+
+    // =====================
+    // RÉCUPÉRER VILLES PAR DÉPARTEMENT
+    // =====================
+    #[Route('/par-departement/{id}', name: 'by_departement', methods: ['GET'])]
+    public function villesByDepartement(Departement $departement, VilleRepository $villeRepo): JsonResponse
+    {
+        $villes = $villeRepo->findByDepartementOrderedByNom($departement);
+
+        $data = array_map(fn(Ville $v) => [
+            'id' => $v->getId(),
+            'nom' => $v->getNom(),
+        ], $villes);
 
         return $this->json($data);
     }
@@ -97,6 +115,5 @@ final class VilleController extends AbstractController
             'errors'  => $this->getFormErrors($form),
         ], 422);
     }
-
 
 }
